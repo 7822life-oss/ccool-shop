@@ -1,4 +1,4 @@
-/* 商品資料集中在此；已修復遺失的 hero 元素報錯。 */
+/* 商品資料集中在此；支援雙層篩選（大分類 + 機型次分類）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v26';
+      key = 'ccool-cart-v27';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -550,6 +550,10 @@ window.CCOOL_SHOP = {
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
     
     const series = [...new Set(products.map((p) => p.series))];
+    let currentSeriesIndex = 0; // 0 代表全部商品
+    let currentModelFilter = 'all'; // 'all', '7代', '8代', '7、8代通用'
+
+    // 渲染大分類篩選列
     $('ccs-filters').innerHTML = ['全部商品', ...series]
       .map(
         (s, i) =>
@@ -558,6 +562,17 @@ window.CCOOL_SHOP = {
           }">${esc(s)}</button>`
       )
       .join('');
+
+    // 動態插入機型次級篩選列
+    const modelFilterContainer = document.createElement('div');
+    modelFilterContainer.className = 'ccs-model-filters';
+    modelFilterContainer.innerHTML = `
+      <span style="font-size:12px; color:#888; align-self:center; margin-right:4px;">機型：</span>
+      <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
+      <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
+      <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
+    `;
+    $('ccs-filters').after(modelFilterContainer);
 
     function step(cartKey, n) {
       return `<div class="ccs-step"><button type="button" data-step="-1" data-cartkey="${esc(
@@ -569,44 +584,52 @@ window.CCOOL_SHOP = {
       )}" aria-label="增加數量">＋</button></div>`;
     }
 
-    function renderProducts(selected = 0) {
-      $('ccs-grid').innerHTML = products
-        .filter((p) => !selected || p.series === series[selected - 1])
-        .map((p) => {
-          let optHtml = '';
-          let currentSku = p.id;
-          if (p.options && p.options.length > 0) {
-            currentSku = p.options[0].sku;
-            optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
-          }
-          const displayName = (p.color === '原創' || p.color === '絕版' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
-          
-          let promoHtml = '';
-          if (p.series === '絕版品出清') {
-            promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
-          }
+    function renderProducts() {
+      const filteredProducts = products.filter((p) => {
+        const matchSeries = !currentSeriesIndex || p.series === series[currentSeriesIndex - 1];
+        let matchModel = true;
+        if (currentModelFilter === '7代') {
+          matchModel = p.model.includes('7代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '7代');
+        } else if (currentModelFilter === '8代') {
+          matchModel = p.model.includes('8代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '8代');
+        }
+        return matchSeries && matchModel;
+      });
 
-          return `<article class="ccs-product" data-product-card="${esc(p.id)}">
-            <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
-              <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
-            </button>
-            <div class="ccs-sku" data-sku-display="${esc(p.id)}">${esc(currentSku)} / ${esc(p.color)}</div>
-            <h3>${esc(displayName)}</h3>
-            <div class="ccs-model">適用 ${esc(p.model)}｜不含機身</div>
-            ${optHtml}
-            <strong class="ccs-price">${money(p.price)}</strong>
-            ${promoHtml}
-            <div class="ccs-product-actions">
-              <div class="ccs-step">
-                <button type="button" data-prod-step="-1" data-id="${esc(p.id)}" aria-label="減少">−</button>
-                <input type="number" min="1" max="99" value="1" data-prod-qty="${esc(p.id)}" inputmode="numeric">
-                <button type="button" data-prod-step="1" data-id="${esc(p.id)}" aria-label="增加">＋</button>
-              </div>
-              <button type="button" data-add="${esc(p.id)}">加入購物車 ＋</button>
+      $('ccs-grid').innerHTML = filteredProducts.length ? filteredProducts.map((p) => {
+        let optHtml = '';
+        let currentSku = p.id;
+        if (p.options && p.options.length > 0) {
+          currentSku = p.options[0].sku;
+          optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
+        }
+        const displayName = (p.color === '原創' || p.color === '絕版' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
+        
+        let promoHtml = '';
+        if (p.series === '絕版品出清') {
+          promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
+        }
+
+        return `<article class="ccs-product" data-product-card="${esc(p.id)}">
+          <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
+            <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
+          </button>
+          <div class="ccs-sku" data-sku-display="${esc(p.id)}">${esc(currentSku)} / ${esc(p.color)}</div>
+          <h3>${esc(displayName)}</h3>
+          <div class="ccs-model">適用 ${esc(p.model)}｜不含機身</div>
+          ${optHtml}
+          <strong class="ccs-price">${money(p.price)}</strong>
+          ${promoHtml}
+          <div class="ccs-product-actions">
+            <div class="ccs-step">
+              <button type="button" data-prod-step="-1" data-id="${esc(p.id)}" aria-label="減少">−</button>
+              <input type="number" min="1" max="99" value="1" data-prod-qty="${esc(p.id)}" inputmode="numeric">
+              <button type="button" data-prod-step="1" data-id="${esc(p.id)}" aria-label="增加">＋</button>
             </div>
-          </article>`;
-        })
-        .join('');
+            <button type="button" data-add="${esc(p.id)}">加入購物車 ＋</button>
+          </div>
+        </article>`;
+      }).join('') : '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color:#888;">沒有找到符合條件的商品</div>';
     }
 
     function rows() {
@@ -741,7 +764,8 @@ window.CCOOL_SHOP = {
         const targetSeries = b.dataset.gotoSeries;
         const index = series.indexOf(targetSeries);
         if (index !== -1) {
-          renderProducts(index + 1);
+          currentSeriesIndex = index + 1;
+          renderProducts();
           root.querySelectorAll('[data-filter]').forEach((el) => {
             el.setAttribute('aria-pressed', el.dataset.filter == (index + 1));
           });
@@ -749,10 +773,18 @@ window.CCOOL_SHOP = {
         $('ccs-products').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
+      // 大分類點擊
       if (b.hasAttribute('data-filter')) {
-        const i = Number(b.dataset.filter);
+        currentSeriesIndex = Number(b.dataset.filter);
         root.querySelectorAll('[data-filter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
-        renderProducts(i);
+        renderProducts();
+      }
+
+      // 機型次分類點擊
+      if (b.hasAttribute('data-modelfilter')) {
+        currentModelFilter = b.dataset.modelfilter;
+        root.querySelectorAll('[data-modelfilter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
+        renderProducts();
       }
       
       if (b.dataset.prodStep) {
