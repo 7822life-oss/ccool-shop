@@ -1,4 +1,4 @@
-/* 商品資料集中在此；修正雙層篩選列的插入位置。 */
+/* 商品資料集中在此；支援右下角懸浮浮動視窗的收合與展開互動。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v28';
+      key = 'ccool-cart-v29';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -576,6 +576,15 @@ window.CCOOL_SHOP = {
         <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
       `;
       filtersContainer.after(modelFilterContainer);
+    }
+
+    // 右下角懸浮浮動視窗收合展開控制
+    const floatBanner = $('ccs-float-banner');
+    const floatToggle = $('ccs-float-toggle');
+    if (floatBanner && floatToggle) {
+      floatToggle.addEventListener('click', () => {
+        floatBanner.classList.toggle('collapsed');
+      });
     }
 
     function step(cartKey, n) {
