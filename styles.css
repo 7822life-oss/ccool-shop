@@ -18,7 +18,24 @@
 #ccs :focus-visible { outline: 2px solid #d8c6a5; outline-offset: 4px; }
 #ccs h1, #ccs h2, #ccs h3, #ccs p { margin: 0; }
 #ccs h2 { font-size: 26px; line-height: 1.4; letter-spacing: -.7px; }
-#ccs img { display: block; max-width: 100%; }
+
+/* 禁止全站圖片被拖曳、反白與另存 */
+#ccs img {
+  display: block;
+  max-width: 100%;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none; /* 讓圖片不接受滑鼠直接點擊與拖曳事件 */
+}
+
+/* 確保按鈕或可點擊的圖片容器底下的事件正常運作 */
+#ccs button, #ccs a, #ccs .ccs-product-photo, #ccs dialog img {
+  pointer-events: auto;
+}
+
 #ccs button img { pointer-events: none; }
 
 #ccs .ccs-head { max-width: 1360px; margin: auto; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line, #333); gap: 20px; }
