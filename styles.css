@@ -28,15 +28,72 @@
   -moz-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
-  pointer-events: none; /* 讓圖片不接受滑鼠直接點擊與拖曳事件 */
+  pointer-events: none;
 }
-
-/* 確保按鈕或可點擊的圖片容器底下的事件正常運作 */
-#ccs button, #ccs a, #ccs .ccs-product-photo, #ccs dialog img {
+#ccs button, #ccs a, #ccs .ccs-product-photo, #ccs dialog img, #ccs .ccs-float-banner img {
   pointer-events: auto;
 }
-
 #ccs button img { pointer-events: none; }
+
+/* 右下角懸浮浮動視窗樣式 */
+.ccs-float-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease-in-out;
+}
+.ccs-float-content {
+  width: 280px;
+  background: #1c1c1c;
+  border: 1px solid #444;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+.ccs-float-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+#ccs-float-toggle {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2b2b2b;
+  color: #fff;
+  border: 1px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  z-index: 2;
+  transition: background 0.2s, transform 0.3s;
+}
+#ccs-float-toggle:hover {
+  background: #444;
+}
+#ccs-float-toggle span {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+/* 收合狀態 */
+.ccs-float-banner.collapsed {
+  transform: translateX(calc(100% - 20px));
+}
+.ccs-float-banner.collapsed #ccs-float-toggle span {
+  transform: scale(-1, 1); /* 讓收合時符號水平鏡射翻轉，視覺更自然 */
+}
 
 #ccs .ccs-head { max-width: 1360px; margin: auto; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line, #333); gap: 20px; }
 #ccs .ccs-brand { position: relative; width: 172px; height: 30px; overflow: hidden; display: block; flex-shrink: 0; }
