@@ -6,6 +6,11 @@
     <title>C.COOL｜保護套・LINE訂購</title>
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="script.js"></script>
+    <script>
+      document.addEventListener('contextmenu', event => event.preventDefault());
+      document.addEventListener('copy', event => event.preventDefault());
+      document.addEventListener('selectstart', event => event.preventDefault());
+    </script>
   </head>
   <body style="margin: 0; background: #101010;">
     <div id="ccs">
@@ -46,7 +51,6 @@
         
         <div class="ccs-layout">
           <section id="ccs-products">
-            <!-- 新增在商品區塊上方的圖片 Banner -->
             <div style="margin-bottom: 32px; border-radius: 16px; overflow: hidden; border: 1px solid #333; background: #1c1c1c;">
               <img src="https://i.meee.com.tw/jifSTLR.jpg" alt="活動專區 Banner" style="width: 100%; height: auto; display: block;" />
             </div>
