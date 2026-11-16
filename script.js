@@ -1,4 +1,4 @@
-/* 商品資料集中在此；支援右下角懸浮浮動視窗的收合與展開互動。 */
+/* 商品資料集中在此；已將分類順序調整為「原創設計」排在最前面。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v29';
+      key = 'ccool-cart-v30';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -549,7 +549,10 @@ window.CCOOL_SHOP = {
     }
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
     
-    const series = [...new Set(products.map((p) => p.series))];
+    // 自訂系列順序：將「原創設計」排在最前面
+    const rawSeries = [...new Set(products.map((p) => p.series))];
+    const series = ['原創設計', ...rawSeries.filter(s => s !== '原創設計')];
+
     let currentSeriesIndex = 0; // 0 代表全部商品
     let currentModelFilter = 'all'; // 'all', '7代', '8代'
 
