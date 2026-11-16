@@ -1,4 +1,4 @@
-/* 商品資料集中在此；新增豹紋灰色(K383)與棕色(K384)。 */
+/* 商品資料集中在此；包含最新商品與規格連動邏輯。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -236,7 +236,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v7';
+      key = 'ccool-cart-v8';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
