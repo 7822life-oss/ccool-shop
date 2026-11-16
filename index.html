@@ -8,7 +8,6 @@
     <script type="module" src="script.js"></script>
   </head>
   <body style="margin: 0; background: #101010;">
-    <!-- 獨立容器不改動原網站頁首；本區僅收集資料並預填 LINE，沒有送單伺服器。 -->
     <div id="ccs">
       <header class="ccs-head">
         <a href="#ccs" class="ccs-brand" aria-label="C.COOL 首頁">
@@ -24,7 +23,7 @@
       <main>
         <section class="ccs-hero">
           <div class="ccs-hero-copy">
-            <div class="ccs-eyebrow">C.COOL COLLECTION</div>
+            <div class="ccs-eyebrow">C.COOL COLLECTION / 01</div>
             <h1>原創設計。<br /><span>只為懂質感的人。</span></h1>
             <p>原創設計 熱銷日韓</p>
           </div>
@@ -82,7 +81,7 @@
               付款方式：7-11 取貨付款。<br />店名或門市代碼，填其中一項就可以。
             </p>
             <div class="ccs-detail-note">
-              訂購申請需由客服確認庫存及出貨。<br />請在 LINE 聊天室按「送出」，我們才會收到資料。
+              訂購申請需由客服確認庫存與出貨。<br />請在 LINE 聊天室按「送出」，我們才會收到資料。
             </div>
           </div>
           <form id="ccs-form">
@@ -129,7 +128,7 @@
                   autocapitalize="characters"
                   spellcheck="false"
                 />
-                <small>有填寫才會附在訂單；未填寫可由客服協助確認發票方式。</small>
+                <small>有填寫才會附在訂單，未填寫則由客服用 LINE 發送發票檔案。</small>
               </label>
               <label class="ccs-wide">
                 訂單備註 <span>（選填）</span>
@@ -168,7 +167,6 @@
         <button type="button" data-go-cart>查看購物車 →</button>
       </div>
       <div id="ccs-toast" role="status" aria-live="polite"></div>
-      <!-- 原生對話框提供鍵盤關閉與焦點管理。 -->
       <dialog id="ccs-review">
         <div class="ccs-dialog-top">
           <div>
