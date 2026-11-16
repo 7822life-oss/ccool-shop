@@ -1,4 +1,4 @@
-/* 商品資料集中在此；已移除訂單明細結尾的冗餘提示文字。 */
+/* 商品資料集中在此；已修復遺失的 hero 元素報錯。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v25';
+      key = 'ccool-cart-v26';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
