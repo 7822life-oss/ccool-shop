@@ -1,4 +1,4 @@
-/* 商品資料集中在此；包含最新商品與規格連動邏輯。 */
+/* 商品資料集中在此；新增星空滿鑽黑底(K620，熱銷精選，$399)。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -95,6 +95,15 @@ window.CCOOL_SHOP = {
       image: 'https://i.meee.com.tw/M5zUEnN.jpg',
     },
     {
+      id: 'K445',
+      name: '防摔斜紋矽膠',
+      color: '螢光白',
+      series: '熱銷精選',
+      model: '7、8代',
+      price: 250,
+      image: 'https://i.meee.com.tw/kY00FSz.jpg',
+    },
+    {
       id: 'K366',
       name: 'NBA保護套',
       color: '黑色',
@@ -167,6 +176,217 @@ window.CCOOL_SHOP = {
       image: 'https://i.meee.com.tw/BG7WYA3.jpg',
     },
     {
+      id: 'K620',
+      name: '星空滿鑽',
+      color: '黑底',
+      series: '熱銷精選',
+      model: '7、8代通用',
+      price: 399,
+      image: 'https://i.meee.com.tw/2u4wgXu.png',
+    },
+    {
+      id: 'K372_LOGO',
+      name: '銀刻LOGO系列',
+      color: '銀刻',
+      series: '原創設計',
+      model: '7代/8代',
+      price: 399,
+      image: 'https://i.meee.com.tw/qh1rIbu.jpg',
+      options: [
+        { label: '7代', value: '7代', sku: 'K472', image: 'https://i.meee.com.tw/qh1rIbu.jpg' },
+        { label: '8代', value: '8代', sku: 'K473', image: 'https://i.meee.com.tw/u73No98.jpg' }
+      ]
+    },
+    {
+      id: 'K504',
+      name: '台灣系列：水果紙箱',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/3talTIk.jpg',
+    },
+    {
+      id: 'K505',
+      name: '台灣系列：台灣記憶',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/1xBkzNX.jpg',
+    },
+    {
+      id: 'K506',
+      name: '台灣系列：啤酒肚小熊',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/EQr1xUE.jpg',
+    },
+    {
+      id: 'K507',
+      name: '玄木系列：赤楓',
+      color: 'Red Maple',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/j1FDLat.png',
+    },
+    {
+      id: 'K508',
+      name: '玄木系列：白橡',
+      color: 'White Oak',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/CKNTzfC.png',
+    },
+    {
+      id: 'K509',
+      name: '玄木系列：黑檀',
+      color: 'Ebony',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/C0LJEnp.png',
+    },
+    {
+      id: 'K510',
+      name: '玄木系列：胡桃',
+      color: 'Dark Walnut',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/URhFw34.png',
+    },
+    {
+      id: 'K536',
+      name: '岩系列：霧岩',
+      color: 'Onyx Stone',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/5c0CpGR.jpg',
+    },
+    {
+      id: 'K537',
+      name: '岩系列：墨岩',
+      color: 'Mist Stone',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/J2O860g.jpg',
+    },
+    {
+      id: 'K538',
+      name: '岩系列：赤岩',
+      color: 'Iron Stone',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/HKojyj7.jpg',
+    },
+    {
+      id: 'K511',
+      name: '花磚系列：海棠花窗',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/DAx27CK.jpg',
+    },
+    {
+      id: 'K514',
+      name: '花磚系列：黑色花磚',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/noFFbrN.jpg',
+    },
+    {
+      id: 'K487',
+      name: '麻將：白底',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/aMDtWYc.jpg',
+    },
+    {
+      id: 'K486',
+      name: '麻將：滿版',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/vBuvuM9.jpg',
+    },
+    {
+      id: 'K539',
+      name: '聯名款：可愛尼胖',
+      color: '尼胖聯名',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/R3QogcE.jpg',
+    },
+    {
+      id: 'K515',
+      name: '原創系列：吞金喵',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/tWPlkr9.jpg',
+    },
+    {
+      id: 'K513',
+      name: '原創系列：惡魔骷髏',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/vtoaojI.jpg',
+    },
+    {
+      id: 'K512',
+      name: '原創系列：撲克牌',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/rwqkpQi.jpg',
+    },
+    {
+      id: 'K540',
+      name: '德州撲克：綠底',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/eDePlln.jpg',
+    },
+    {
+      id: 'K541',
+      name: '德州撲克：紅底',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/5s9n28C.jpg',
+    },
+    {
+      id: 'K542',
+      name: '德州撲克：黑底',
+      color: '原創',
+      series: '原創設計',
+      model: '7、8代通用',
+      price: 599,
+      image: 'https://i.meee.com.tw/TcVTXDi.jpg',
+    },
+    {
       id: 'K378',
       name: '白底smile熊',
       color: '可愛圖',
@@ -175,8 +395,8 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/1Jkxfek.jpg',
       options: [
-        { label: '7代', value: '7代', sku: 'K378' },
-        { label: '8代', value: '8代', sku: 'K446' }
+        { label: '7代', value: '7代', sku: 'K378', image: 'https://i.meee.com.tw/1Jkxfek.jpg' },
+        { label: '8代', value: '8代', sku: 'K446', image: 'https://i.meee.com.tw/MVIiE0m.jpg' }
       ]
     },
     {
@@ -197,8 +417,43 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/H0ahX5G.jpg',
       options: [
-        { label: '7代', value: '7代', sku: 'K380' },
-        { label: '8代', value: '8代', sku: 'K447' }
+        { label: '7代', value: '7代', sku: 'K380', image: 'https://i.meee.com.tw/H0ahX5G.jpg' },
+        { label: '8代', value: '8代', sku: 'K447', image: 'https://i.meee.com.tw/4q2d8Bm.jpg' }
+      ]
+    },
+    {
+      id: 'K381',
+      name: '白底粉紅愛心',
+      color: '可愛圖',
+      series: '熱銷精選',
+      model: '7代',
+      price: 350,
+      image: 'https://i.meee.com.tw/WWt48dG.jpg'
+    },
+    {
+      id: 'K385',
+      name: '小熊',
+      color: '卡其色',
+      series: '熱銷精選',
+      model: '7代/8代',
+      price: 350,
+      image: 'https://i.meee.com.tw/DnuKnFA.jpg',
+      options: [
+        { label: '7代', value: '7代', sku: 'K385', image: 'https://i.meee.com.tw/DnuKnFA.jpg' },
+        { label: '8代', value: '8代', sku: 'K448', image: 'https://i.meee.com.tw/jLIBIJL.jpg' }
+      ]
+    },
+    {
+      id: 'K386',
+      name: '小熊',
+      color: '深棕色',
+      series: '熱銷精選',
+      model: '7代/8代',
+      price: 350,
+      image: 'https://i.meee.com.tw/WomrcHI.jpg',
+      options: [
+        { label: '7代', value: '7代', sku: 'K386', image: 'https://i.meee.com.tw/WomrcHI.jpg' },
+        { label: '8代', value: '8代', sku: 'K449', image: 'https://i.meee.com.tw/INHXUiY.jpg' }
       ]
     },
     {
@@ -236,7 +491,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v8';
+      key = 'ccool-cart-v21';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -306,14 +561,15 @@ window.CCOOL_SHOP = {
           let currentSku = p.id;
           if (p.options && p.options.length > 0) {
             currentSku = p.options[0].sku;
-            optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}">${esc(o.label)}</option>`).join('')}</select></div>`;
+            optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
           }
+          const displayName = (p.color === '原創' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
           return `<article class="ccs-product" data-product-card="${esc(p.id)}">
-            <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name+p.color)}大圖">
-              <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name + ' ' + p.color)}" loading="lazy">
+            <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
+              <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
             </button>
             <div class="ccs-sku" data-sku-display="${esc(p.id)}">${esc(currentSku)} / ${esc(p.color)}</div>
-            <h3>${esc(p.name)} · ${esc(p.color)}</h3>
+            <h3>${esc(displayName)}</h3>
             <div class="ccs-model">適用 ${esc(p.model)}｜不含機身</div>
             ${optHtml}
             <strong class="ccs-price">${money(p.price)}</strong>
@@ -368,11 +624,17 @@ window.CCOOL_SHOP = {
       $('ccs-items').innerHTML = list.length
         ? list
             .map(
-              (item) =>
-                `<div class="ccs-cart-row">
-                  <img src="${esc(item.image)}" alt="${esc(item.color)}">
+              (item) => {
+                let itemImage = item.image;
+                if (item.options) {
+                  const opt = item.options.find(o => o.value === item.spec);
+                  if (opt && opt.image) itemImage = opt.image;
+                }
+                const cartDisplayName = (item.color === '原創' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
+                return `<div class="ccs-cart-row">
+                  <img src="${esc(itemImage)}" alt="${esc(item.name)}">
                   <div>
-                    <h3>${esc(item.name + ' · ' + item.color)}</h3>
+                    <h3>${esc(cartDisplayName)}</h3>
                     <small>${esc(item.displayId)} · 規格：${esc(item.spec)}</small>
                     <strong class="ccs-row-price">${money(item.price * item.qty)}</strong>
                     <div class="ccs-cart-row-bottom">
@@ -380,7 +642,8 @@ window.CCOOL_SHOP = {
                       <button type="button" data-remove="${esc(item.cartKey)}" aria-label="移除">移除</button>
                     </div>
                   </div>
-                </div>`
+                </div>`;
+              }
             )
             .join('')
         : '<div class="ccs-empty"><span>＋</span>購物車還空著。<br>挑一款喜歡的保護套吧。</div>';
@@ -404,12 +667,17 @@ window.CCOOL_SHOP = {
         const productId = target.dataset.opt;
         const selectedOption = target.options[target.selectedIndex];
         const newSku = selectedOption.getAttribute('data-sku');
+        const newImg = selectedOption.getAttribute('data-img');
         const card = target.closest('[data-product-card]');
         if (card) {
           const skuDisplay = card.querySelector('[data-sku-display]');
+          const imgTarget = card.querySelector('[data-img-target]');
           const p = map.get(productId);
           if (skuDisplay && p) {
             skuDisplay.textContent = `${newSku} / ${p.color}`;
+          }
+          if (imgTarget && newImg) {
+            imgTarget.src = newImg;
           }
         }
       }
@@ -471,9 +739,15 @@ window.CCOOL_SHOP = {
         const p = map.get(b.dataset.zoom);
         if (p) {
           const d = $('ccs-zoom');
-          d.querySelector('img').src = p.image;
-          d.querySelector('img').alt = p.name + ' ' + p.color;
-          d.querySelector('p').textContent = p.id + '｜' + p.name + ' · ' + p.color + '｜適用 ' + p.model + '｜僅保護套，不含機身';
+          const card = b.closest('[data-product-card]');
+          let activeImg = p.image;
+          if (card) {
+            const imgTarget = card.querySelector('[data-img-target]');
+            if (imgTarget) activeImg = imgTarget.src;
+          }
+          d.querySelector('img').src = activeImg;
+          d.querySelector('img').alt = p.name;
+          d.querySelector('p').textContent = p.id + '｜' + p.name + '｜適用 ' + p.model + '｜僅保護套，不含機身';
           d.showModal();
         }
       }
@@ -512,7 +786,7 @@ window.CCOOL_SHOP = {
         '【C.COOL 訂購申請】',
         ...rows().map(
           (item, i) =>
-            `${i + 1}. ${item.displayId} ${item.name}／${item.color}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`
+            `${i + 1}. ${item.displayId} ${item.name}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`
         ),
         '',
         `商品小計：NT$${t.sub}`,
@@ -526,7 +800,7 @@ window.CCOOL_SHOP = {
         `手機條碼載具：${f.invoice.value || '未填寫'}`,
         `備註：${f.note.value || '無'}`,
         '',
-        '僅訂購保護套，不含機身。',
+        '連同照片確認，僅訂購保護套，不含機身。',
         '請協助確認庫存與出貨，謝謝！',
       ];
       $('ccs-message').value = lines.join('\n');
