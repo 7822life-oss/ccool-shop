@@ -63,9 +63,15 @@
 #ccs .ccs-layout { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 40px; padding: 48px 0 64px; align-items: start; }
 #ccs .ccs-section-head p { margin-top: 12px; color: var(--muted, #a4a4a4); font-size: 12px; }
 #ccs .ccs-section-head .ccs-eyebrow { margin-bottom: 10px; }
-#ccs .ccs-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0; }
+#ccs .ccs-filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 12px; }
 #ccs .ccs-filters button { border-radius: 24px; font-size: 12px; padding: 7px 15px; }
 #ccs .ccs-filters button[aria-pressed=true] { background: #f3f3f3; color: #161616; border-color: transparent; }
+
+/* 機型次級篩選列樣式 */
+#ccs .ccs-model-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; align-items: center; }
+#ccs .ccs-model-filters button { border-radius: 20px; font-size: 11px; padding: 5px 12px; background: #1c1c1c; border-color: #333; color: #bbb; }
+#ccs .ccs-model-filters button[aria-pressed=true] { background: #333; color: #fff; border-color: #666; }
+
 #ccs .ccs-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px 20px; }
 #ccs .ccs-product { min-width: 0; }
 #ccs .ccs-product-photo { width: 100%; display: block; aspect-ratio: 1; background: white; border: 0; padding: 0; overflow: hidden; border-radius: 10px; }
