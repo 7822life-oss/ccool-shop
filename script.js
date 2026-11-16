@@ -1,4 +1,4 @@
-/* 商品資料集中在此；新增星空滿鑽黑底(K620，熱銷精選，$399)。 */
+/* 商品資料集中在此；已移除訂單明細結尾的冗餘提示文字。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -387,6 +387,24 @@ window.CCOOL_SHOP = {
       image: 'https://i.meee.com.tw/TcVTXDi.jpg',
     },
     {
+      id: 'K461',
+      name: '絕版品：岩系列：褐岩',
+      color: '絕版',
+      series: '絕版品出清',
+      model: '7代',
+      price: 499,
+      image: 'https://i.meee.com.tw/yjtgENw.jpg',
+    },
+    {
+      id: 'K462',
+      name: '絕版品：岩系列：赤岩',
+      color: '絕版',
+      series: '絕版品出清',
+      model: '7代',
+      price: 499,
+      image: 'https://i.meee.com.tw/23e8E8k.jpg',
+    },
+    {
       id: 'K378',
       name: '白底smile熊',
       color: '可愛圖',
@@ -491,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v21';
+      key = 'ccool-cart-v25';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -530,8 +548,6 @@ window.CCOOL_SHOP = {
       timer = setTimeout(() => $('ccs-toast').classList.remove('show'), 2400);
     }
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
-    root.querySelector('[data-hero]').src = products[0].image;
-    root.querySelector('.ccs-hero-image').dataset.zoom = products[0].id;
     
     const series = [...new Set(products.map((p) => p.series))];
     $('ccs-filters').innerHTML = ['全部商品', ...series]
@@ -563,7 +579,13 @@ window.CCOOL_SHOP = {
             currentSku = p.options[0].sku;
             optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
           }
-          const displayName = (p.color === '原創' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
+          const displayName = (p.color === '原創' || p.color === '絕版' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
+          
+          let promoHtml = '';
+          if (p.series === '絕版品出清') {
+            promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
+          }
+
           return `<article class="ccs-product" data-product-card="${esc(p.id)}">
             <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
               <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
@@ -573,6 +595,7 @@ window.CCOOL_SHOP = {
             <div class="ccs-model">適用 ${esc(p.model)}｜不含機身</div>
             ${optHtml}
             <strong class="ccs-price">${money(p.price)}</strong>
+            ${promoHtml}
             <div class="ccs-product-actions">
               <div class="ccs-step">
                 <button type="button" data-prod-step="-1" data-id="${esc(p.id)}" aria-label="減少">−</button>
@@ -604,11 +627,30 @@ window.CCOOL_SHOP = {
     }
 
     function totals() {
-      const list = rows(),
-        count = list.reduce((s, item) => s + item.qty, 0),
-        sub = list.reduce((s, item) => s + item.price * item.qty, 0),
-        fee = count ? config.shipping : 0;
-      return { count, sub, fee, total: sub + fee };
+      const list = rows();
+      const count = list.reduce((s, item) => s + item.qty, 0);
+      
+      let clearanceQty = 0;
+      let otherSub = 0;
+      
+      list.forEach(item => {
+        if (item.series === '絕版品出清') {
+          clearanceQty += item.qty;
+        } else {
+          otherSub += item.price * item.qty;
+        }
+      });
+      
+      let clearanceSub = 0;
+      if (clearanceQty > 0) {
+        const pairs = Math.floor(clearanceQty / 2);
+        const singles = clearanceQty % 2;
+        clearanceSub = (pairs * 799) + (singles * 499);
+      }
+      
+      const sub = otherSub + clearanceSub;
+      const fee = count ? config.shipping : 0;
+      return { count, sub, fee, total: sub + fee, clearanceQty };
     }
 
     function renderCart() {
@@ -630,7 +672,7 @@ window.CCOOL_SHOP = {
                   const opt = item.options.find(o => o.value === item.spec);
                   if (opt && opt.image) itemImage = opt.image;
                 }
-                const cartDisplayName = (item.color === '原創' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
+                const cartDisplayName = (item.color === '原創' || item.color === '絕版' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
                 return `<div class="ccs-cart-row">
                   <img src="${esc(itemImage)}" alt="${esc(item.name)}">
                   <div>
@@ -694,6 +736,19 @@ window.CCOOL_SHOP = {
       const b = event.target.closest('button,a');
       if (!b) return;
       if (b.hasAttribute('data-go-cart')) goCart();
+      
+      if (b.dataset.gotoSeries) {
+        const targetSeries = b.dataset.gotoSeries;
+        const index = series.indexOf(targetSeries);
+        if (index !== -1) {
+          renderProducts(index + 1);
+          root.querySelectorAll('[data-filter]').forEach((el) => {
+            el.setAttribute('aria-pressed', el.dataset.filter == (index + 1));
+          });
+        }
+        $('ccs-products').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
       if (b.hasAttribute('data-filter')) {
         const i = Number(b.dataset.filter);
         root.querySelectorAll('[data-filter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
@@ -799,9 +854,6 @@ window.CCOOL_SHOP = {
         `7-11 門市店名或代碼：${f.store.value}`,
         `手機條碼載具：${f.invoice.value || '未填寫'}`,
         `備註：${f.note.value || '無'}`,
-        '',
-        '連同照片確認，僅訂購保護套，不含機身。',
-        '請協助確認庫存與出貨，謝謝！',
       ];
       $('ccs-message').value = lines.join('\n');
       $('ccs-copy-status').textContent = '';
