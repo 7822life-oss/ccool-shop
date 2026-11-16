@@ -1,1 +1,198 @@
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C.COOL｜保護套・LINE訂購</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body style="margin: 0; background: #101010;">
+    <!-- 獨立容器不改動原網站頁首；本區僅收集資料並預填 LINE，沒有送單伺服器。 -->
+    <div id="ccs">
+      <header class="ccs-head">
+        <a href="#ccs" class="ccs-brand" aria-label="C.COOL 首頁">
+          <img data-logo alt="C.COOL" />
+        </a>
+        <nav>
+          <a href="#ccs-products">選購系列</a>
+          <button type="button" data-go-cart>
+            購物車 <span data-count>0</span>
+          </button>
+        </nav>
+      </header>
+      <main>
+        <section class="ccs-hero">
+          <div class="ccs-hero-copy">
+            <div class="ccs-eyebrow">C.COOL COLLECTION</div>
+            <h1>原創設計。<br /><span>只為懂質感的人。</span></h1>
+            <p>原創設計 熱銷日韓</p>
+          </div>
+          <button
+            type="button"
+            class="ccs-hero-image"
+            data-zoom="K370"
+            aria-label="查看商品大圖"
+          >
+            <span class="ccs-image-label">SERPENTINE / 彩色</span>
+            <img data-hero alt="商品圖片，圖片含展示機身" />
+            <span class="ccs-image-foot">K370 <span>查看細節 ＋</span></span>
+          </button>
+        </section>
+        <div class="ccs-service">
+          <span>01 選款加入購物車</span>
+          <span>02 填寫收件資料</span>
+          <span>03 LINE 送出訂購申請</span>
+        </div>
+        <div class="ccs-layout">
+          <section id="ccs-products">
+            <div class="ccs-section-head">
+              <div class="ccs-eyebrow">THE COLLECTION</div>
+              <h2>熱銷精選系列</h2>
+              <p>僅販售保護套，不含機身。</p>
+            </div>
+            <div id="ccs-filters" class="ccs-filters" aria-label="商品系列"></div>
+            <div id="ccs-grid" class="ccs-grid"></div>
+          </section>
+          <aside id="ccs-cart" class="ccs-cart" tabindex="-1">
+            <div class="ccs-cart-title">
+              <h2>你的購物車</h2>
+              <span><span data-count>0</span> 件</span>
+            </div>
+            <div id="ccs-items"></div>
+            <div class="ccs-totals">
+              <div>商品小計 <span id="ccs-sub">NT$0</span></div>
+              <div>運費 <span id="ccs-fee">NT$0</span></div>
+              <div class="ccs-total">
+                取貨付款總額 <strong id="ccs-total">NT$0</strong>
+              </div>
+            </div>
+            <p class="ccs-note">每筆訂單運費 NT$60 · 7-11 取貨付款</p>
+            <button type="button" id="ccs-checkout" class="ccs-primary" disabled>
+              填寫收件資料 <span>→</span>
+            </button>
+            <p class="ccs-cart-help">商品與數量確認後，再傳送至官方 LINE。</p>
+          </aside>
+        </div>
+        <section class="ccs-form-section" id="ccs-delivery" hidden>
+          <div>
+            <div class="ccs-eyebrow">DELIVERY DETAILS</div>
+            <h2>最後一步，填寫收件資料。</h2>
+            <p>
+              付款方式：7-11 取貨付款。<br />店名或門市代碼，填其中一項就可以。
+            </p>
+            <div class="ccs-detail-note">
+              訂購申請需由客服確認庫存及出貨。<br />請在 LINE 聊天室按「送出」，我們才會收到資料。
+            </div>
+          </div>
+          <form id="ccs-form">
+            <div class="ccs-fields">
+              <label>
+                收件人姓名 <b>*</b>
+                <input
+                  name="receiver"
+                  autocomplete="name"
+                  required
+                  maxlength="30"
+                  placeholder="請填寫真實姓名"
+                />
+              </label>
+              <label>
+                手機號碼 <b>*</b>
+                <input
+                  name="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  required
+                  pattern="09[0-9]{8}"
+                  maxlength="10"
+                  placeholder="09 開頭的 10 碼手機"
+                />
+              </label>
+              <label class="ccs-wide">
+                7-11 門市店名或代碼 <b>*</b>
+                <input
+                  name="store"
+                  required
+                  maxlength="60"
+                  placeholder="例如：○○門市 或 123456"
+                />
+                <small>請確認門市名稱或代碼填寫正確，避免寄錯門市。</small>
+              </label>
+              <label class="ccs-wide">
+                手機條碼載具 <span>（選填）</span>
+                <input
+                  name="invoice"
+                  maxlength="8"
+                  placeholder="例如：/ABC1234"
+                  autocapitalize="characters"
+                  spellcheck="false"
+                />
+                <small>有填寫才會附在訂單；未填寫可由客服協助確認發票方式。</small>
+              </label>
+              <label class="ccs-wide">
+                訂單備註 <span>（選填）</span>
+                <textarea
+                  name="note"
+                  rows="3"
+                  maxlength="200"
+                  placeholder="其他需要告訴客服的事項"
+                ></textarea>
+              </label>
+            </div>
+            <label class="ccs-agree">
+              <input type="checkbox" required />
+              我已確認商品、數量及收件資料，並同意將上述資料帶入官方 LINE 供處理訂購申請。
+            </label>
+            <button type="submit" class="ccs-primary">
+              確認訂單內容 <span>→</span>
+            </button>
+            <p class="ccs-note">收件資料不會儲存在此網頁，也不會自動傳送給客服。</p>
+          </form>
+        </section>
+      </main>
+      <footer>
+        <div class="ccs-brand"><img data-logo alt="C.COOL" /></div>
+        <p>
+          選好喜歡的，剩下交給我們。<br />
+          <small>© C.COOL · 訂購資料以客服確認為準</small>
+        </p>
+      </footer>
+      <div class="ccs-mobile-cart">
+        <div>
+          <span data-count>0</span> 件商品
+          <strong id="ccs-mobile-total">NT$0</strong>
+          <small>含運總額</small>
+        </div>
+        <button type="button" data-go-cart>查看購物車 →</button>
+      </div>
+      <div id="ccs-toast" role="status" aria-live="polite"></div>
+      <!-- 原生對話框提供鍵盤關閉與焦點管理。 -->
+      <dialog id="ccs-review">
+        <div class="ccs-dialog-top">
+          <div>
+            <div class="ccs-eyebrow">ORDER REVIEW</div>
+            <h2>確認後，前往 LINE。</h2>
+          </div>
+          <button type="button" data-close aria-label="關閉訂單確認">✕</button>
+        </div>
+        <p>請核對下方明細。開啟 LINE 後，記得再按「送出」。</p>
+        <textarea id="ccs-message" readonly aria-label="訂單完整內容"></textarea>
+        <a id="ccs-line" class="ccs-line" target="_blank" rel="noopener">
+          開啟 LINE 並帶入訂單 ↗
+        </a>
+        <div class="ccs-review-actions">
+          <button type="button" id="ccs-copy">複製整份訂單</button>
+          <button type="button" data-close>返回修改</button>
+        </div>
+        <p id="ccs-copy-status" role="status"></p>
+      </dialog>
+      <dialog id="ccs-zoom">
+        <button type="button" data-close aria-label="關閉商品圖片">✕</button>
+        <img alt="" />
+        <p></p>
+      </dialog>
+    </div>
+  </body>
+</html>
