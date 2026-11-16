@@ -1,4 +1,4 @@
-/* 商品資料集中在此；支援雙層篩選（大分類 + 機型次分類）。 */
+/* 商品資料集中在此；修正雙層篩選列的插入位置。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v27';
+      key = 'ccool-cart-v28';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -551,10 +551,11 @@ window.CCOOL_SHOP = {
     
     const series = [...new Set(products.map((p) => p.series))];
     let currentSeriesIndex = 0; // 0 代表全部商品
-    let currentModelFilter = 'all'; // 'all', '7代', '8代', '7、8代通用'
+    let currentModelFilter = 'all'; // 'all', '7代', '8代'
 
     // 渲染大分類篩選列
-    $('ccs-filters').innerHTML = ['全部商品', ...series]
+    const filtersContainer = $('ccs-filters');
+    filtersContainer.innerHTML = ['全部商品', ...series]
       .map(
         (s, i) =>
           `<button type="button" data-filter="${i}" aria-pressed="${
@@ -563,16 +564,19 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 動態插入機型次級篩選列
-    const modelFilterContainer = document.createElement('div');
-    modelFilterContainer.className = 'ccs-model-filters';
-    modelFilterContainer.innerHTML = `
-      <span style="font-size:12px; color:#888; align-self:center; margin-right:4px;">機型：</span>
-      <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
-      <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
-      <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
-    `;
-    $('ccs-filters').after(modelFilterContainer);
+    // 在大分類下方動態插入機型次級篩選列
+    let modelFilterContainer = root.querySelector('.ccs-model-filters');
+    if (!modelFilterContainer) {
+      modelFilterContainer = document.createElement('div');
+      modelFilterContainer.className = 'ccs-model-filters';
+      modelFilterContainer.innerHTML = `
+        <span style="font-size:12px; color:#888; align-self:center; margin-right:4px;">機型：</span>
+        <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
+        <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
+        <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
+      `;
+      filtersContainer.after(modelFilterContainer);
+    }
 
     function step(cartKey, n) {
       return `<div class="ccs-step"><button type="button" data-step="-1" data-cartkey="${esc(
@@ -783,7 +787,7 @@ window.CCOOL_SHOP = {
       // 機型次分類點擊
       if (b.hasAttribute('data-modelfilter')) {
         currentModelFilter = b.dataset.modelfilter;
-        root.querySelectorAll('[data-modelfilter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
+        modelFilterContainer.querySelectorAll('[data-modelfilter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
         renderProducts();
       }
       
