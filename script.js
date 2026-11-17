@@ -1,4 +1,4 @@
-/* 商品資料集中在此；「T牌保護盒」獨立為單一分類，不與 7、8 代混排且不顯示小分類。 */
+/* 商品資料集中在此；強制更新機型小分類列，移除小分類中的「T牌」，且點選「T牌保護盒」時完全隱藏小分類列。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -659,7 +659,7 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v35';
+      key = 'ccool-cart-v36';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -717,19 +717,19 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 在大分類下方動態插入機型次級篩選列（僅保留 7代、8代，不包含 T牌）
+    // 強制建立或覆蓋機型次級篩選列（絕對只放 全部型號、7代、8代，徹底移除 T牌）
     let modelFilterContainer = root.querySelector('.ccs-model-filters');
     if (!modelFilterContainer) {
       modelFilterContainer = document.createElement('div');
       modelFilterContainer.className = 'ccs-model-filters';
-      modelFilterContainer.innerHTML = `
-        <span style="font-size:12px; color:#888; align-self:center; margin-right:4px;">機型：</span>
-        <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
-        <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
-        <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
-      `;
       filtersContainer.after(modelFilterContainer);
     }
+    modelFilterContainer.innerHTML = `
+      <span style="font-size:12px; color:#888; align-self:center; margin-right:4px;">機型：</span>
+      <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
+      <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
+      <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
+    `;
 
     // 右下角懸浮浮動視窗收合展開控制
     const floatBanner = $('ccs-float-banner');
@@ -761,13 +761,13 @@ window.CCOOL_SHOP = {
       const selectedSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
       const isTBrandCategory = selectedSeries === 'T牌保護盒';
 
-      // 當點選「T牌保護盒」時，自動隱藏 7、8 代小分類列
+      // 當點選「T牌保護盒」時，完全隱藏下方的機型小分類列
       if (modelFilterContainer) {
-        modelFilterContainer.hidden = isTBrandCategory;
+        modelFilterContainer.style.display = isTBrandCategory ? 'none' : 'flex';
       }
 
       const filteredProducts = products.filter((p) => {
-        // 如果目前在「T牌保護盒」分類：只顯示 T牌保護盒，忽略 7/8 代小分類
+        // 如果目前在「T牌保護盒」分類：只顯示 T牌保護盒
         if (isTBrandCategory) {
           return p.series === 'T牌保護盒';
         }
@@ -1077,7 +1077,7 @@ window.CCOOL_SHOP = {
             d.appendChild(zoomAddonBox);
           }
           if (zoomAddonBox) {
-            zoomAddonBox.hidden = (p.series === 'T牌保護盒');
+            zoomAddonBox.style.display = (p.series === 'T牌保護盒') ? 'none' : 'flex';
           }
 
           d.showModal();
