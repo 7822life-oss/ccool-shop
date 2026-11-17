@@ -30,10 +30,84 @@
   user-drag: none;
   pointer-events: none;
 }
-#ccs button, #ccs a, #ccs .ccs-product-photo, #ccs dialog img, #ccs .ccs-float-banner img {
+#ccs button, #ccs a, #ccs .ccs-product-photo, #ccs dialog img, #ccs .ccs-float-banner img, #ccs .ccs-slider-btn, #ccs .ccs-dot {
   pointer-events: auto;
 }
 #ccs button img { pointer-events: none; }
+
+/* 圖片輪播牆樣式 */
+.ccs-slider {
+  position: relative;
+  width: 100%;
+  border: 1px solid #393939;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1c1c1c;
+}
+.ccs-slider-track {
+  display: flex;
+  transition: transform 0.4s ease-in-out;
+  width: 100%;
+}
+.ccs-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+.ccs-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ccs-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  z-index: 10;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  padding: 0;
+}
+.ccs-slider-btn:hover {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #fff;
+}
+.ccs-prev { left: 12px; }
+.ccs-next { right: 12px; }
+
+.ccs-slider-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+.ccs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+.ccs-dot.active {
+  background: #fff;
+  width: 20px;
+  border-radius: 4px;
+}
 
 /* 右下角懸浮浮動視窗樣式 */
 .ccs-float-banner {
@@ -108,29 +182,6 @@
 #ccs h1 { font-size: clamp(38px, 4.7vw, 64px); line-height: 1.17; letter-spacing: -2px; font-weight: 800; margin-bottom: 24px; }
 #ccs h1 span { color: #909090; }
 #ccs .ccs-hero-copy > p { color: #bbb; margin-bottom: 28px; font-size: 15px; }
-
-/* Banner 按鈕樣式 */
-#ccs .ccs-hero-banner-btn {
-  border: 1px solid #393939;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #1c1c1c;
-  padding: 0;
-  text-align: left;
-  position: relative;
-  width: 100%;
-  cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s;
-}
-#ccs .ccs-hero-banner-btn:hover {
-  border-color: #888;
-  transform: translateY(-2px);
-}
-#ccs .ccs-hero-banner-btn img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
 
 #ccs .ccs-service { border-block: 1px solid var(--line, #333); padding: 16px 0; display: flex; justify-content: space-between; color: #a9a9a9; font-size: 11px; gap: 12px; }
 
@@ -229,7 +280,7 @@
   #ccs .ccs-head { padding: 16px 18px; gap: 10px; }
   #ccs .ccs-brand { width: 120px; height: 22px; }
   #ccs nav { gap: 8px; font-size: 10px; }
-  #ccs nav > a { font-size: 10px; padding: 2px 4px; } /* 手機版也正常顯示 IG 與 LINE 連結 */
+  #ccs nav > a { font-size: 10px; padding: 2px 4px; }
   #ccs main { padding: 0 18px; }
   #ccs .ccs-hero { grid-template-columns: 1fr; gap: 28px; padding: 36px 0 28px; }
   #ccs h1 { font-size: 43px; }
