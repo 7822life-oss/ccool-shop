@@ -1,4 +1,4 @@
-/* 商品資料集中在此；推進器加購價改為 NT$69 且不顯示 SKU。 */
+/* 商品資料集中在此；新增「T牌保護盒」分類索引與 15 款 T牌 商品。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -12,7 +12,7 @@ window.CCOOL_SHOP = {
     series: '配件加購',
     model: '通用配件',
     price: 69,
-    image: 'https://i.meee.com.tw/OEd9CUr.png', // 之後若有推進器圖片可直接替換此網址
+    image: 'https://i.meee.com.tw/OEd9CUr.png',
   },
   products: [
     {
@@ -503,6 +503,142 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/P8P5YRO.jpg'
     },
+    // T牌保護盒系列（不額外補字）
+    {
+      id: 'K387',
+      name: '鯉魚',
+      color: '',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/YoI66wW.jpg'
+    },
+    {
+      id: 'K388',
+      name: '老虎',
+      color: '',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/rYF24e2.jpg'
+    },
+    {
+      id: 'K389',
+      name: '荔枝紋',
+      color: '綠色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/N9SF8f5.jpg'
+    },
+    {
+      id: 'K390',
+      name: '荔枝紋',
+      color: '橘色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/bM6KLGw.jpg'
+    },
+    {
+      id: 'K391',
+      name: '荔枝紋',
+      color: '黑色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/Z5zJKJz.png'
+    },
+    {
+      id: 'K392',
+      name: '荔枝紋',
+      color: '藍色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/r8G9Mxq.png'
+    },
+    {
+      id: 'K393',
+      name: 'LV白花棕色',
+      color: '',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/1pcyIvG.jpg'
+    },
+    {
+      id: 'K394',
+      name: 'NBA',
+      color: '黑色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/8cgJR4n.png'
+    },
+    {
+      id: 'K395',
+      name: 'NBA',
+      color: '藍色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/sWgxFz3.png'
+    },
+    {
+      id: 'K396',
+      name: '木紋',
+      color: '紅色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/tkBHLz7.jpg'
+    },
+    {
+      id: 'K397',
+      name: '木紋',
+      color: '棕色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/NbaFXJU.jpg'
+    },
+    {
+      id: 'K398',
+      name: '豹紋',
+      color: '棕色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/L9U461g.jpg'
+    },
+    {
+      id: 'K399',
+      name: '豹紋',
+      color: '灰色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 380,
+      image: 'https://i.meee.com.tw/Pjj1vdS.jpg'
+    },
+    {
+      id: 'K441',
+      name: '透明',
+      color: '',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 280,
+      image: 'https://i.meee.com.tw/B8ma46e.jpg'
+    },
+    {
+      id: 'K619',
+      name: '星空滿鑽',
+      color: '黑色',
+      series: 'T牌保護盒',
+      model: 'T牌',
+      price: 390,
+      image: 'https://i.meee.com.tw/cdS32Bq.png'
+    },
   ],
 };
 
@@ -523,7 +659,7 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v33';
+      key = 'ccool-cart-v34';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -563,12 +699,12 @@ window.CCOOL_SHOP = {
     }
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
     
-    // 自訂系列順序：將「原創設計」排在最前面
+    // 自訂系列順序：將「原創設計」排在最前面，並包含「T牌保護盒」
     const rawSeries = [...new Set(products.map((p) => p.series))];
     const series = ['原創設計', ...rawSeries.filter(s => s !== '原創設計')];
 
     let currentSeriesIndex = 0; // 0 代表全部商品
-    let currentModelFilter = 'all'; // 'all', '7代', '8代'
+    let currentModelFilter = 'all'; // 'all', '7代', '8代', 'T牌'
 
     // 渲染大分類篩選列
     const filtersContainer = $('ccs-filters');
@@ -581,7 +717,7 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 在大分類下方動態插入機型次級篩選列
+    // 在大分類下方動態插入機型次級篩選列（新增 T牌 篩選）
     let modelFilterContainer = root.querySelector('.ccs-model-filters');
     if (!modelFilterContainer) {
       modelFilterContainer = document.createElement('div');
@@ -591,6 +727,7 @@ window.CCOOL_SHOP = {
         <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
         <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
         <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
+        <button type="button" data-modelfilter="T牌" aria-pressed="false">T牌</button>
       `;
       filtersContainer.after(modelFilterContainer);
     }
@@ -602,6 +739,13 @@ window.CCOOL_SHOP = {
       floatToggle.addEventListener('click', () => {
         floatBanner.classList.toggle('collapsed');
       });
+    }
+
+    function formatDisplayName(item) {
+      if (!item.color || item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) {
+        return item.name;
+      }
+      return `${item.name} · ${item.color}`;
     }
 
     function step(cartKey, n) {
@@ -622,6 +766,8 @@ window.CCOOL_SHOP = {
           matchModel = p.model.includes('7代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '7代');
         } else if (currentModelFilter === '8代') {
           matchModel = p.model.includes('8代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '8代');
+        } else if (currentModelFilter === 'T牌') {
+          matchModel = p.model.includes('T牌');
         }
         return matchSeries && matchModel;
       });
@@ -633,7 +779,8 @@ window.CCOOL_SHOP = {
           currentSku = p.options[0].sku;
           optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
         }
-        const displayName = (p.color === '原創' || p.color === '絕版' || p.color === '尼胖聯名' || p.color.includes('Stone') || p.color.includes('Maple') || p.color.includes('Oak') || p.color.includes('Ebony') || p.color.includes('Walnut')) ? p.name : `${p.name} · ${p.color}`;
+        const displayName = formatDisplayName(p);
+        const skuText = p.color ? `${esc(currentSku)} / ${esc(p.color)}` : esc(currentSku);
         
         let promoHtml = '';
         if (p.series === '絕版品出清') {
@@ -652,7 +799,7 @@ window.CCOOL_SHOP = {
           <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
             <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
           </button>
-          <div class="ccs-sku" data-sku-display="${esc(p.id)}">${esc(currentSku)} / ${esc(p.color)}</div>
+          <div class="ccs-sku" data-sku-display="${esc(p.id)}">${skuText}</div>
           <h3>${esc(displayName)}</h3>
           <div class="ccs-model">適用 ${esc(p.model)}｜不含機身</div>
           ${optHtml}
@@ -734,7 +881,7 @@ window.CCOOL_SHOP = {
                   const opt = item.options.find(o => o.value === item.spec);
                   if (opt && opt.image) itemImage = opt.image;
                 }
-                const cartDisplayName = (item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
+                const cartDisplayName = formatDisplayName(item);
                 const subText = item.displayId ? `${esc(item.displayId)} · 規格：${esc(item.spec)}` : `規格：${esc(item.spec)}`;
                 return `<div class="ccs-cart-row">
                   <img src="${esc(itemImage)}" alt="${esc(item.name)}">
@@ -779,7 +926,7 @@ window.CCOOL_SHOP = {
           const imgTarget = card.querySelector('[data-img-target]');
           const p = map.get(productId);
           if (skuDisplay && p) {
-            skuDisplay.textContent = `${newSku} / ${p.color}`;
+            skuDisplay.textContent = p.color ? `${newSku} / ${p.color}` : newSku;
           }
           if (imgTarget && newImg) {
             imgTarget.src = newImg;
@@ -849,7 +996,8 @@ window.CCOOL_SHOP = {
         const input = article.querySelector('[data-prod-qty]');
         const optSelect = article.querySelector('[data-opt]');
         const addonCheck = article.querySelector('[data-addon-check]');
-        const spec = optSelect ? optSelect.value : map.get(id).model;
+        const p = map.get(id);
+        const spec = optSelect ? optSelect.value : p.model;
         const cartKey = id + '_' + spec;
         
         const n = quantity(input);
@@ -865,10 +1013,11 @@ window.CCOOL_SHOP = {
         }
 
         renderCart();
+        const fullTitle = formatDisplayName(p);
         notify(
           addonAdded
-            ? `已加入：${map.get(id).name} (${spec}) ＋ ${addon.name}`
-            : `已加入購物車：${map.get(id).name} (${spec})`
+            ? `已加入：${fullTitle} (${spec}) ＋ ${addon.name}`
+            : `已加入購物車：${fullTitle} (${spec})`
         );
       }
 
@@ -895,9 +1044,10 @@ window.CCOOL_SHOP = {
             const imgTarget = card.querySelector('[data-img-target]');
             if (imgTarget) activeImg = imgTarget.src;
           }
+          const fullTitle = formatDisplayName(p);
           d.querySelector('img').src = activeImg;
-          d.querySelector('img').alt = p.name;
-          d.querySelector('p').textContent = p.id + '｜' + p.name + '｜適用 ' + p.model + '｜僅保護套，不含機身';
+          d.querySelector('img').alt = fullTitle;
+          d.querySelector('p').textContent = p.id + '｜' + fullTitle + '｜適用 ' + p.model + '｜僅保護套，不含機身';
 
           // 在大圖彈窗內動態加入推進器加購列
           let zoomAddonBox = d.querySelector('.ccs-zoom-addon');
@@ -953,7 +1103,8 @@ window.CCOOL_SHOP = {
         ...rows().map(
           (item, i) => {
             const titlePrefix = item.displayId ? `${item.displayId} ` : '';
-            return `${i + 1}. ${titlePrefix}${item.name}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`;
+            const fullTitle = formatDisplayName(item);
+            return `${i + 1}. ${titlePrefix}${fullTitle}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`;
           }
         ),
         '',
