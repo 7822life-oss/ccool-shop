@@ -1,17 +1,18 @@
-/* 商品資料集中在此；新增推進器加購功能（卡片勾選加購＋大圖彈窗加購）。 */
+/* 商品資料集中在此；推進器加購價改為 NT$69 且不顯示 SKU。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
   shipping: 60,
-  // 推進器加購設定（可在此自由修改名稱、價格與圖片網址）
+  // 推進器加購設定（價格 NT$69，不顯示 SKU）
   addon: {
-    id: 'ADD01',
+    id: 'ADDON',
+    hideSku: true,
     name: '專用輔助推進器',
     color: '加購配件',
     series: '配件加購',
     model: '通用配件',
-    price: 99,
-    image: 'https://i.meee.com.tw/OEd9CUr.png', // 之後可換成推進器的商品圖網址
+    price: 69,
+    image: 'https://i.meee.com.tw/OEd9CUr.png', // 之後若有推進器圖片可直接替換此網址
   },
   products: [
     {
@@ -522,7 +523,7 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v32';
+      key = 'ccool-cart-v33';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -677,7 +678,7 @@ window.CCOOL_SHOP = {
           const p = map.get(id);
           if (!p) return null;
           
-          let displayId = p.id;
+          let displayId = p.hideSku ? '' : p.id;
           if (p.options) {
             const matchedOpt = p.options.find(o => o.value === spec);
             if (matchedOpt) displayId = matchedOpt.sku;
@@ -734,11 +735,12 @@ window.CCOOL_SHOP = {
                   if (opt && opt.image) itemImage = opt.image;
                 }
                 const cartDisplayName = (item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
+                const subText = item.displayId ? `${esc(item.displayId)} · 規格：${esc(item.spec)}` : `規格：${esc(item.spec)}`;
                 return `<div class="ccs-cart-row">
                   <img src="${esc(itemImage)}" alt="${esc(item.name)}">
                   <div>
                     <h3>${esc(cartDisplayName)}</h3>
-                    <small>${esc(item.displayId)} · 規格：${esc(item.spec)}</small>
+                    <small>${subText}</small>
                     <strong class="ccs-row-price">${money(item.price * item.qty)}</strong>
                     <div class="ccs-cart-row-bottom">
                       ${step(item.cartKey, item.qty)}
@@ -949,8 +951,10 @@ window.CCOOL_SHOP = {
       const lines = [
         '【C.COOL 訂購申請】',
         ...rows().map(
-          (item, i) =>
-            `${i + 1}. ${item.displayId} ${item.name}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`
+          (item, i) => {
+            const titlePrefix = item.displayId ? `${item.displayId} ` : '';
+            return `${i + 1}. ${titlePrefix}${item.name}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`;
+          }
         ),
         '',
         `商品小計：NT$${t.sub}`,
