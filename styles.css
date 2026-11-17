@@ -35,96 +35,99 @@
 }
 #ccs button img { pointer-events: none; }
 
-/* 圖片輪播牆樣式（完美適應直向/方型圖片，不變形） */
-.ccs-slider {
+/* 圖片輪播牆樣式（加上 #ccs 提高權重，鎖定 100% 寬度防跑版） */
+#ccs .ccs-slider {
   position: relative;
   width: 100%;
-  background: #1c1c1c;
+  max-width: 100%;
+  background: #181818;
   border: 1px solid #393939;
   border-radius: 16px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
-.ccs-slider-track {
+#ccs .ccs-slider-track {
   display: flex;
-  transition: transform 0.4s ease-in-out;
   width: 100%;
-  height: 100%;
+  transition: transform 0.4s ease-in-out;
+  align-items: center;
 }
-.ccs-slide {
-  min-width: 100%;
-  height: 100%;
-  flex-shrink: 0;
+#ccs .ccs-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #181818;
 }
-.ccs-slide img {
+#ccs .ccs-slide img {
   width: 100%;
   height: auto;
-  max-height: 480px;
-  object-fit: contain; /* 完整呈現圖片原貌，絕不變形裁剪 */
+  max-height: 520px;
+  object-fit: contain;
   display: block;
-  margin: auto;
+  margin: 0 auto;
 }
-.ccs-slider-btn {
+#ccs .ccs-slider-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.65);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 36px;
-  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 15px;
   z-index: 10;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
   padding: 0;
+  line-height: 1;
+  transition: background 0.2s, border-color 0.2s;
 }
-.ccs-slider-btn:hover {
-  background: rgba(0, 0, 0, 0.85);
+#ccs .ccs-slider-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
   border-color: #fff;
 }
-.ccs-prev { left: 12px; }
-.ccs-next { right: 12px; }
+#ccs .ccs-prev { left: 12px; }
+#ccs .ccs-next { right: 12px; }
 
-.ccs-slider-dots {
+#ccs .ccs-slider-dots {
   position: absolute;
   bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 6px 12px;
   border-radius: 20px;
 }
-.ccs-dot {
+#ccs .ccs-dot {
   width: 8px;
   height: 8px;
+  min-width: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  border: 0;
   padding: 0;
   cursor: pointer;
   transition: background 0.2s, width 0.2s;
 }
-.ccs-dot.active {
+#ccs .ccs-dot.active {
   background: #fff;
-  width: 20px;
+  width: 22px;
   border-radius: 4px;
 }
 
 /* 右下角懸浮浮動視窗樣式 */
-.ccs-float-banner {
+#ccs .ccs-float-banner {
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -133,7 +136,7 @@
   align-items: center;
   transition: transform 0.3s ease-in-out;
 }
-.ccs-float-content {
+#ccs .ccs-float-content {
   width: 280px;
   background: #1c1c1c;
   border: 1px solid #444;
@@ -141,12 +144,12 @@
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
-.ccs-float-content img {
+#ccs .ccs-float-content img {
   width: 100%;
   height: auto;
   display: block;
 }
-#ccs-float-toggle {
+#ccs #ccs-float-toggle {
   position: absolute;
   top: -12px;
   left: -12px;
@@ -164,10 +167,10 @@
   z-index: 2;
   transition: background 0.2s, transform 0.3s;
 }
-#ccs-float-toggle:hover {
+#ccs #ccs-float-toggle:hover {
   background: #444;
 }
-#ccs-float-toggle span {
+#ccs #ccs-float-toggle span {
   display: inline-block;
   font-size: 14px;
   line-height: 1;
@@ -176,10 +179,10 @@
 }
 
 /* 收合狀態 */
-.ccs-float-banner.collapsed {
+#ccs .ccs-float-banner.collapsed {
   transform: translateX(calc(100% - 20px));
 }
-.ccs-float-banner.collapsed #ccs-float-toggle span {
+#ccs .ccs-float-banner.collapsed #ccs-float-toggle span {
   transform: scale(-1, 1);
 }
 
@@ -191,7 +194,8 @@
 #ccs nav [data-count] { margin-left: 8px; background: white; color: #111; min-width: 22px; display: inline-block; text-align: center; border-radius: 99px; }
 
 #ccs main { max-width: 1280px; margin: auto; padding: 0 40px; }
-#ccs .ccs-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; padding: 56px 0; }
+/* 修正：將 1fr 改為 minmax(0, 1fr)，防止輪播大圖撐破 Grid 欄位 */
+#ccs .ccs-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; align-items: center; padding: 56px 0; }
 #ccs .ccs-eyebrow { font-size: 10px; letter-spacing: 2.2px; color: #bebebe; font-weight: 600; margin-bottom: 18px; }
 #ccs h1 { font-size: clamp(38px, 4.7vw, 64px); line-height: 1.17; letter-spacing: -2px; font-weight: 800; margin-bottom: 24px; }
 #ccs h1 span { color: #909090; }
