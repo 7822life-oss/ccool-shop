@@ -1,4 +1,4 @@
-/* 商品資料集中在此；已將分類順序調整為「原創設計」排在最前面。 */
+/* 商品資料集中在此；支援圖片輪播牆（自動輪播、左右切換、圓點連動）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -509,7 +509,7 @@ window.CCOOL_SHOP = {
       products = config.products,
       map = new Map(products.map((p) => [p.id, p]));
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v30';
+      key = 'ccool-cart-v31';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -588,6 +588,66 @@ window.CCOOL_SHOP = {
       floatToggle.addEventListener('click', () => {
         floatBanner.classList.toggle('collapsed');
       });
+    }
+
+    // 圖片輪播牆邏輯 (自動輪播 + 左右按鈕 + 圓點)
+    const track = root.querySelector('.ccs-slider-track');
+    const slides = root.querySelectorAll('.ccs-slide');
+    const dots = root.querySelectorAll('.ccs-dot');
+    const prevBtn = root.querySelector('.ccs-prev');
+    const nextBtn = root.querySelector('.ccs-next');
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let slideTimer;
+
+    function updateSlider(index) {
+      currentSlide = (index + totalSlides) % totalSlides;
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      updateSlider(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      updateSlider(currentSlide - 1);
+    }
+
+    function startSliderTimer() {
+      stopSliderTimer();
+      slideTimer = setInterval(nextSlide, 4000); // 每 4 秒自動輪播
+    }
+
+    function stopSliderTimer() {
+      if (slideTimer) clearInterval(slideTimer);
+    }
+
+    if (track && slides.length > 0) {
+      nextBtn?.addEventListener('click', () => {
+        nextSlide();
+        startSliderTimer();
+      });
+      prevBtn?.addEventListener('click', () => {
+        prevSlide();
+        startSliderTimer();
+      });
+      dots.forEach((dot) => {
+        dot.addEventListener('click', (e) => {
+          const idx = Number(e.target.dataset.index);
+          updateSlider(idx);
+          startSliderTimer();
+        });
+      });
+
+      // 滑鼠移入暫停自動輪播，移出恢復
+      const sliderContainer = root.querySelector('.ccs-slider');
+      sliderContainer?.addEventListener('mouseenter', stopSliderTimer);
+      sliderContainer?.addEventListener('mouseleave', startSliderTimer);
+
+      startSliderTimer();
     }
 
     function step(cartKey, n) {
