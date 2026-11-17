@@ -6,17 +6,18 @@
     <title>C.COOL｜保護套・LINE訂購</title>
     
     <!-- 瀏覽器分頁圖示 (Favicon) -->
-    <link rel="icon" type="image/png" href="https://i.meee.com.tw/OEd9CUr.png" />
+    <link rel="icon" type="image/png" href="https://i.meee.com.tw/HGaJFcb.png" />
     
     <!-- Open Graph / 社群分享預覽設定 (SEO 圖) -->
     <meta property="og:title" content="C.COOL｜保護套・LINE訂購" />
     <meta property="og:description" content="原創設計。只為懂質感的人。專屬保護套系列，線上選購與 LINE 快速訂購。" />
-    <meta property="og:image" content="https://i.meee.com.tw/l5LwXc1.png" />
+    <meta property="og:image" content="https://i.meee.com.tw/HGaJFcb.png" />
     <meta property="og:url" content="https://7822life.github.io/ccool-shop/" />
     <meta property="og:type" content="website" />
 
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
+    <!-- 加上 v=99 強制突破瀏覽器快取 -->
+    <link rel="stylesheet" href="styles.css?v=99" />
+    <script type="module" src="script.js?v=99"></script>
     <script>
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('copy', event => event.preventDefault());
@@ -46,19 +47,33 @@
             <p>原創設計 熱銷日韓</p>
           </div>
           
-          <!-- 輪播牆容器 -->
-          <div class="ccs-slider">
-            <div class="ccs-slider-track">
-              <div class="ccs-slide"><img src="https://i.meee.com.tw/fxs5LcA.jpg" alt="輪播圖片 1" /></div>
-              <div class="ccs-slide"><img src="https://i.meee.com.tw/wKH7qdf.jpg" alt="輪播圖片 2" /></div>
-              <div class="ccs-slide"><img src="https://i.meee.com.tw/uKkFnjT.jpg" alt="輪播圖片 3" /></div>
-            </div>
-            <button type="button" class="ccs-slider-btn ccs-prev" aria-label="上一張圖片">❮</button>
-            <button type="button" class="ccs-slider-btn ccs-next" aria-label="下一張圖片">❯</button>
-            <div class="ccs-slider-dots">
-              <button type="button" class="ccs-dot active" data-index="0" aria-label="跳至第 1 張"></button>
-              <button type="button" class="ccs-dot" data-index="1" aria-label="跳至第 2 張"></button>
-              <button type="button" class="ccs-dot" data-index="2" aria-label="跳至第 3 張"></button>
+          <!-- 獨立自帶樣式的單圖輪播框（絕對不歪掉） -->
+          <div id="hero-box" style="position: relative; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid #393939; background: #181818;">
+            <img
+              id="hero-slide-img"
+              src="https://i.meee.com.tw/fxs5LcA.jpg"
+              alt="C.COOL 輪播圖"
+              style="width: 100%; height: auto; display: block; margin: 0 auto; transition: opacity 0.25s ease;"
+            />
+            <button
+              type="button"
+              id="hero-prev"
+              aria-label="上一張"
+              style="position: absolute; top: 50%; left: 12px; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; font-size: 16px; line-height: 1;"
+            >❮</button>
+            <button
+              type="button"
+              id="hero-next"
+              aria-label="下一張"
+              style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.65); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; font-size: 16px; line-height: 1;"
+            >❯</button>
+            <div
+              id="hero-dots"
+              style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; background: rgba(0,0,0,0.55); padding: 6px 12px; border-radius: 20px; z-index: 20;"
+            >
+              <span data-dot="0" style="width: 20px; height: 8px; border-radius: 4px; background: #fff; cursor: pointer; display: block; transition: all 0.2s;"></span>
+              <span data-dot="1" style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.45); cursor: pointer; display: block; transition: all 0.2s;"></span>
+              <span data-dot="2" style="width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.45); cursor: pointer; display: block; transition: all 0.2s;"></span>
             </div>
           </div>
         </section>
@@ -229,5 +244,77 @@
         <p></p>
       </dialog>
     </div>
+
+    <!-- 獨立輪播控制腳本 -->
+    <script>
+      (() => {
+        const imgs = [
+          'https://i.meee.com.tw/fxs5LcA.jpg',
+          'https://i.meee.com.tw/wKH7qdf.jpg',
+          'https://i.meee.com.tw/uKkFnjT.jpg'
+        ];
+        let idx = 0;
+        let timer = null;
+        const imgEl = document.getElementById('hero-slide-img');
+        const prevBtn = document.getElementById('hero-prev');
+        const nextBtn = document.getElementById('hero-next');
+        const dots = document.querySelectorAll('#hero-dots [data-dot]');
+        const box = document.getElementById('hero-box');
+
+        // 預先載入三張圖片，切換不閃爍
+        imgs.forEach(src => { const i = new Image(); i.src = src; });
+
+        function show(newIdx) {
+          idx = (newIdx + imgs.length) % imgs.length;
+          imgEl.style.opacity = '0.3';
+          setTimeout(() => {
+            imgEl.src = imgs[idx];
+            imgEl.style.opacity = '1';
+          }, 120);
+
+          dots.forEach((d, i) => {
+            if (i === idx) {
+              d.style.width = '20px';
+              d.style.borderRadius = '4px';
+              d.style.background = '#fff';
+            } else {
+              d.style.width = '8px';
+              d.style.borderRadius = '50%';
+              d.style.background = 'rgba(255,255,255,0.45)';
+            }
+          });
+        }
+
+        function startTimer() {
+          clearInterval(timer);
+          timer = setInterval(() => show(idx + 1), 4000);
+        }
+
+        prevBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          show(idx - 1);
+          startTimer();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          show(idx + 1);
+          startTimer();
+        });
+
+        dots.forEach(d => {
+          d.addEventListener('click', (e) => {
+            e.stopPropagation();
+            show(Number(d.getAttribute('data-dot')));
+            startTimer();
+          });
+        });
+
+        box.addEventListener('mouseenter', () => clearInterval(timer));
+        box.addEventListener('mouseleave', startTimer);
+
+        startTimer();
+      })();
+    </script>
   </body>
 </html>
