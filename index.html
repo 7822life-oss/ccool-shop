@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>C.COOL｜保護套・LINE訂購</title>
+    
+    <!-- 瀏覽器分頁圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="https://i.meee.com.tw/OEd9CUr.png" />
+    
+    <!-- Open Graph / 社群分享預覽設定 (SEO 圖) -->
+    <meta property="og:title" content="C.COOL｜保護套・LINE訂購" />
+    <meta property="og:description" content="原創設計。只為懂質感的人。專屬保護套系列，線上選購與 LINE 快速訂購。" />
+    <meta property="og:image" content="https://i.meee.com.tw/l5LwXc1.png" />
+    <meta property="og:url" content="https://7822life.github.io/ccool-shop/" />
+    <meta property="og:type" content="website" />
+
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="script.js"></script>
     <script>
@@ -34,15 +45,24 @@
             <h1>原創設計。<br /><span>只為懂質感的人。</span></h1>
             <p>原創設計 熱銷日韓</p>
           </div>
-          <button
-            type="button"
-            class="ccs-hero-banner-btn"
-            data-goto-series="絕版品出清"
-            aria-label="前往絕版品出清專區"
-          >
-            <img src="https://i.meee.com.tw/l5LwXc1.png" alt="絕版品出清專區 Banner" />
-          </button>
+          
+          <!-- 輪播牆容器 -->
+          <div class="ccs-slider">
+            <div class="ccs-slider-track">
+              <div class="ccs-slide"><img src="https://i.meee.com.tw/fxs5LcA.jpg" alt="輪播圖片 1" /></div>
+              <div class="ccs-slide"><img src="https://i.meee.com.tw/wKH7qdf.jpg" alt="輪播圖片 2" /></div>
+              <div class="ccs-slide"><img src="https://i.meee.com.tw/uKkFnjT.jpg" alt="輪播圖片 3" /></div>
+            </div>
+            <button type="button" class="ccs-slider-btn ccs-prev" aria-label="上一張圖片">❮</button>
+            <button type="button" class="ccs-slider-btn ccs-next" aria-label="下一張圖片">❯</button>
+            <div class="ccs-slider-dots">
+              <button type="button" class="ccs-dot active" data-index="0" aria-label="跳至第 1 張"></button>
+              <button type="button" class="ccs-dot" data-index="1" aria-label="跳至第 2 張"></button>
+              <button type="button" class="ccs-dot" data-index="2" aria-label="跳至第 3 張"></button>
+            </div>
+          </div>
         </section>
+
         <div class="ccs-service">
           <span>01 選款加入購物車</span>
           <span>02 填寫收件資料</span>
@@ -173,13 +193,13 @@
         <button type="button" data-go-cart>查看購物車 →</button>
       </div>
 
-      <!-- 右下角懸浮浮動視窗（已將按鈕改為 ⚠️） -->
+      <!-- 右下角懸浮浮動視窗 -->
       <div id="ccs-float-banner" class="ccs-float-banner">
         <button type="button" id="ccs-float-toggle" aria-label="收起或展開提示圖片">
           <span>⚠️</span>
         </button>
         <div class="ccs-float-content">
-          <img src="https://i.meee.com.tw/ciemEOa.png" alt="貼心小提醒" />
+          <img src="https://i.meee.com.tw/ciemEOa.png" alt="注意事項" />
         </div>
       </div>
 
