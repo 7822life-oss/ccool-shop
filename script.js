@@ -1,4 +1,4 @@
-/* 商品資料集中在此；新增「T牌保護盒」分類索引與 15 款 T牌 商品。 */
+/* 商品資料集中在此；「T牌保護盒」獨立為單一分類，不與 7、8 代混排且不顯示小分類。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -503,7 +503,7 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/P8P5YRO.jpg'
     },
-    // T牌保護盒系列（不額外補字）
+    // T牌保護盒系列（獨立分類，不與 7、8 代混排）
     {
       id: 'K387',
       name: '鯉魚',
@@ -659,7 +659,7 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v34';
+      key = 'ccool-cart-v35';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -699,12 +699,12 @@ window.CCOOL_SHOP = {
     }
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
     
-    // 自訂系列順序：將「原創設計」排在最前面，並包含「T牌保護盒」
+    // 自訂系列順序：原創設計排第一，T牌保護盒獨立放在最後一個分類
     const rawSeries = [...new Set(products.map((p) => p.series))];
     const series = ['原創設計', ...rawSeries.filter(s => s !== '原創設計')];
 
-    let currentSeriesIndex = 0; // 0 代表全部商品
-    let currentModelFilter = 'all'; // 'all', '7代', '8代', 'T牌'
+    let currentSeriesIndex = 0; // 0 代表全部保護套（不含 T牌保護盒）
+    let currentModelFilter = 'all'; // 'all', '7代', '8代'
 
     // 渲染大分類篩選列
     const filtersContainer = $('ccs-filters');
@@ -717,7 +717,7 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 在大分類下方動態插入機型次級篩選列（新增 T牌 篩選）
+    // 在大分類下方動態插入機型次級篩選列（僅保留 7代、8代，不包含 T牌）
     let modelFilterContainer = root.querySelector('.ccs-model-filters');
     if (!modelFilterContainer) {
       modelFilterContainer = document.createElement('div');
@@ -727,7 +727,6 @@ window.CCOOL_SHOP = {
         <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
         <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
         <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
-        <button type="button" data-modelfilter="T牌" aria-pressed="false">T牌</button>
       `;
       filtersContainer.after(modelFilterContainer);
     }
@@ -759,15 +758,29 @@ window.CCOOL_SHOP = {
     }
 
     function renderProducts() {
+      const selectedSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
+      const isTBrandCategory = selectedSeries === 'T牌保護盒';
+
+      // 當點選「T牌保護盒」時，自動隱藏 7、8 代小分類列
+      if (modelFilterContainer) {
+        modelFilterContainer.hidden = isTBrandCategory;
+      }
+
       const filteredProducts = products.filter((p) => {
-        const matchSeries = !currentSeriesIndex || p.series === series[currentSeriesIndex - 1];
+        // 如果目前在「T牌保護盒」分類：只顯示 T牌保護盒，忽略 7/8 代小分類
+        if (isTBrandCategory) {
+          return p.series === 'T牌保護盒';
+        }
+        // 如果在其他分類（含「全部商品」）：絕對不混入 T牌保護盒
+        if (p.series === 'T牌保護盒') {
+          return false;
+        }
+        const matchSeries = !selectedSeries || p.series === selectedSeries;
         let matchModel = true;
         if (currentModelFilter === '7代') {
           matchModel = p.model.includes('7代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '7代');
         } else if (currentModelFilter === '8代') {
           matchModel = p.model.includes('8代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '8代');
-        } else if (currentModelFilter === 'T牌') {
-          matchModel = p.model.includes('T牌');
         }
         return matchSeries && matchModel;
       });
@@ -787,8 +800,8 @@ window.CCOOL_SHOP = {
           promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
         }
 
-        // 每個商品規格區的「加購推進器」勾選框
-        const addonHtml = addon ? `
+        // 7、8代保護套顯示「加購推進器」勾選框；T牌保護盒不顯示
+        const addonHtml = (addon && p.series !== 'T牌保護盒') ? `
           <label class="ccs-addon-box">
             <input type="checkbox" data-addon-check="${esc(p.id)}" />
             <span>＋加購：${esc(addon.name)} (<b>+${money(addon.price)}</b>)</span>
@@ -1049,7 +1062,7 @@ window.CCOOL_SHOP = {
           d.querySelector('img').alt = fullTitle;
           d.querySelector('p').textContent = p.id + '｜' + fullTitle + '｜適用 ' + p.model + '｜僅保護套，不含機身';
 
-          // 在大圖彈窗內動態加入推進器加購列
+          // 在大圖彈窗內動態加入推進器加購列（T牌保護盒不顯示）
           let zoomAddonBox = d.querySelector('.ccs-zoom-addon');
           if (!zoomAddonBox && addon) {
             zoomAddonBox = document.createElement('div');
@@ -1062,6 +1075,9 @@ window.CCOOL_SHOP = {
               <button type="button" data-zoom-add-addon>＋ 加購 1 件</button>
             `;
             d.appendChild(zoomAddonBox);
+          }
+          if (zoomAddonBox) {
+            zoomAddonBox.hidden = (p.series === 'T牌保護盒');
           }
 
           d.showModal();
