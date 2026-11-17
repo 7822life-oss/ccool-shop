@@ -1,8 +1,18 @@
-/* 商品資料集中在此；支援圖片輪播牆（自動輪播、左右切換、圓點連動）。 */
+/* 商品資料集中在此；新增推進器加購功能（卡片勾選加購＋大圖彈窗加購）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
   shipping: 60,
+  // 推進器加購設定（可在此自由修改名稱、價格與圖片網址）
+  addon: {
+    id: 'ADD01',
+    name: '專用輔助推進器',
+    color: '加購配件',
+    series: '配件加購',
+    model: '通用配件',
+    price: 99,
+    image: 'https://i.meee.com.tw/OEd9CUr.png', // 之後可換成推進器的商品圖網址
+  },
   products: [
     {
       id: 'K370',
@@ -507,9 +517,12 @@ window.CCOOL_SHOP = {
     root.dataset.ready = '1';
     const $ = (id) => root.querySelector('#' + id),
       products = config.products,
+      addon = config.addon,
       map = new Map(products.map((p) => [p.id, p]));
+    if (addon) map.set(addon.id, addon);
+
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v31';
+      key = 'ccool-cart-v32';
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -590,66 +603,6 @@ window.CCOOL_SHOP = {
       });
     }
 
-    // 圖片輪播牆邏輯 (自動輪播 + 左右按鈕 + 圓點)
-    const track = root.querySelector('.ccs-slider-track');
-    const slides = root.querySelectorAll('.ccs-slide');
-    const dots = root.querySelectorAll('.ccs-dot');
-    const prevBtn = root.querySelector('.ccs-prev');
-    const nextBtn = root.querySelector('.ccs-next');
-    let currentSlide = 0;
-    const totalSlides = slides.length;
-    let slideTimer;
-
-    function updateSlider(index) {
-      currentSlide = (index + totalSlides) % totalSlides;
-      track.style.transform = `translateX(-${currentSlide * 100}%)`;
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-    }
-
-    function nextSlide() {
-      updateSlider(currentSlide + 1);
-    }
-
-    function prevSlide() {
-      updateSlider(currentSlide - 1);
-    }
-
-    function startSliderTimer() {
-      stopSliderTimer();
-      slideTimer = setInterval(nextSlide, 4000); // 每 4 秒自動輪播
-    }
-
-    function stopSliderTimer() {
-      if (slideTimer) clearInterval(slideTimer);
-    }
-
-    if (track && slides.length > 0) {
-      nextBtn?.addEventListener('click', () => {
-        nextSlide();
-        startSliderTimer();
-      });
-      prevBtn?.addEventListener('click', () => {
-        prevSlide();
-        startSliderTimer();
-      });
-      dots.forEach((dot) => {
-        dot.addEventListener('click', (e) => {
-          const idx = Number(e.target.dataset.index);
-          updateSlider(idx);
-          startSliderTimer();
-        });
-      });
-
-      // 滑鼠移入暫停自動輪播，移出恢復
-      const sliderContainer = root.querySelector('.ccs-slider');
-      sliderContainer?.addEventListener('mouseenter', stopSliderTimer);
-      sliderContainer?.addEventListener('mouseleave', startSliderTimer);
-
-      startSliderTimer();
-    }
-
     function step(cartKey, n) {
       return `<div class="ccs-step"><button type="button" data-step="-1" data-cartkey="${esc(
         cartKey
@@ -686,6 +639,14 @@ window.CCOOL_SHOP = {
           promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
         }
 
+        // 每個商品規格區的「加購推進器」勾選框
+        const addonHtml = addon ? `
+          <label class="ccs-addon-box">
+            <input type="checkbox" data-addon-check="${esc(p.id)}" />
+            <span>＋加購：${esc(addon.name)} (<b>+${money(addon.price)}</b>)</span>
+          </label>
+        ` : '';
+
         return `<article class="ccs-product" data-product-card="${esc(p.id)}">
           <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
             <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
@@ -696,6 +657,7 @@ window.CCOOL_SHOP = {
           ${optHtml}
           <strong class="ccs-price">${money(p.price)}</strong>
           ${promoHtml}
+          ${addonHtml}
           <div class="ccs-product-actions">
             <div class="ccs-step">
               <button type="button" data-prod-step="-1" data-id="${esc(p.id)}" aria-label="減少">−</button>
@@ -771,7 +733,7 @@ window.CCOOL_SHOP = {
                   const opt = item.options.find(o => o.value === item.spec);
                   if (opt && opt.image) itemImage = opt.image;
                 }
-                const cartDisplayName = (item.color === '原創' || item.color === '絕版' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
+                const cartDisplayName = (item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) ? item.name : `${item.name} · ${item.color}`;
                 return `<div class="ccs-cart-row">
                   <img src="${esc(itemImage)}" alt="${esc(item.name)}">
                   <div>
@@ -878,19 +840,42 @@ window.CCOOL_SHOP = {
         renderCart();
       }
 
+      // 加入購物車（若勾選加購推進器，一併加入）
       if (b.dataset.add) {
         const id = b.dataset.add;
         const article = b.closest('article');
         const input = article.querySelector('[data-prod-qty]');
         const optSelect = article.querySelector('[data-opt]');
+        const addonCheck = article.querySelector('[data-addon-check]');
         const spec = optSelect ? optSelect.value : map.get(id).model;
         const cartKey = id + '_' + spec;
         
         const n = quantity(input);
         const old = cart[cartKey] || 0;
         cart[cartKey] = Math.min(99, old + n);
+
+        let addonAdded = false;
+        if (addon && addonCheck && addonCheck.checked) {
+          const addonKey = addon.id + '_' + addon.model;
+          cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + n);
+          addonCheck.checked = false;
+          addonAdded = true;
+        }
+
         renderCart();
-        notify(`已加入購物車：${map.get(id).name} (${spec})`);
+        notify(
+          addonAdded
+            ? `已加入：${map.get(id).name} (${spec}) ＋ ${addon.name}`
+            : `已加入購物車：${map.get(id).name} (${spec})`
+        );
+      }
+
+      // 大圖彈窗內直接加購推進器
+      if (b.hasAttribute('data-zoom-add-addon') && addon) {
+        const addonKey = addon.id + '_' + addon.model;
+        cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + 1);
+        renderCart();
+        notify(`已加購：${addon.name} (+${money(addon.price)})`);
       }
 
       if (b.dataset.remove) {
@@ -911,6 +896,22 @@ window.CCOOL_SHOP = {
           d.querySelector('img').src = activeImg;
           d.querySelector('img').alt = p.name;
           d.querySelector('p').textContent = p.id + '｜' + p.name + '｜適用 ' + p.model + '｜僅保護套，不含機身';
+
+          // 在大圖彈窗內動態加入推進器加購列
+          let zoomAddonBox = d.querySelector('.ccs-zoom-addon');
+          if (!zoomAddonBox && addon) {
+            zoomAddonBox = document.createElement('div');
+            zoomAddonBox.className = 'ccs-zoom-addon';
+            zoomAddonBox.innerHTML = `
+              <div>
+                <strong>🔧 配件加購：${esc(addon.name)}</strong>
+                <small>搭配保護套更順手・優惠加購價 ${money(addon.price)}</small>
+              </div>
+              <button type="button" data-zoom-add-addon>＋ 加購 1 件</button>
+            `;
+            d.appendChild(zoomAddonBox);
+          }
+
           d.showModal();
         }
       }
