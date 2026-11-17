@@ -15,14 +15,70 @@
     <meta property="og:url" content="https://7822life.github.io/ccool-shop/" />
     <meta property="og:type" content="website" />
 
-    <!-- 加上 v=99 強制突破瀏覽器快取 -->
-    <link rel="stylesheet" href="styles.css?v=99" />
-    <script type="module" src="script.js?v=99"></script>
+    <!-- 加上 v=100 強制突破瀏覽器快取 -->
+    <link rel="stylesheet" href="styles.css?v=100" />
+    <script type="module" src="script.js?v=100"></script>
     <script>
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('copy', event => event.preventDefault());
       document.addEventListener('selectstart', event => event.preventDefault());
     </script>
+    <style>
+      /* 回到頂部按鈕樣式（獨立於 styles.css，避開右下角圖片與手機底部購物車） */
+      #ccs-back-to-top {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(28, 28, 28, 0.9);
+        color: #f7f7f7;
+        border: 1px solid #555;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 9998;
+        padding: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s, border-color 0.2s;
+        pointer-events: auto;
+      }
+      #ccs-back-to-top.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      #ccs-back-to-top:hover {
+        background: #333;
+        border-color: #d8c6a5;
+        color: #d8c6a5;
+      }
+      #ccs-back-to-top span {
+        font-size: 13px;
+        line-height: 1;
+      }
+      #ccs-back-to-top small {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        line-height: 1;
+        margin-top: 2px;
+      }
+      @media (max-width: 760px) {
+        #ccs-back-to-top {
+          bottom: 84px; /* 避開手機版底部固定購物車列 */
+          left: 16px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+    </style>
   </head>
   <body style="margin: 0; background: #101010;">
     <div id="ccs">
@@ -208,6 +264,12 @@
         <button type="button" data-go-cart>查看購物車 →</button>
       </div>
 
+      <!-- 左下角回到頂部按鈕 -->
+      <button type="button" id="ccs-back-to-top" aria-label="回到最上方">
+        <span>↑</span>
+        <small>TOP</small>
+      </button>
+
       <!-- 右下角懸浮浮動視窗 -->
       <div id="ccs-float-banner" class="ccs-float-banner">
         <button type="button" id="ccs-float-toggle" aria-label="收起或展開提示圖片">
@@ -245,9 +307,10 @@
       </dialog>
     </div>
 
-    <!-- 獨立輪播控制腳本 -->
+    <!-- 獨立輪播與回到頂部控制腳本 -->
     <script>
       (() => {
+        // 1. 輪播牆控制
         const imgs = [
           'https://i.meee.com.tw/fxs5LcA.jpg',
           'https://i.meee.com.tw/wKH7qdf.jpg',
@@ -261,7 +324,6 @@
         const dots = document.querySelectorAll('#hero-dots [data-dot]');
         const box = document.getElementById('hero-box');
 
-        // 預先載入三張圖片，切換不閃爍
         imgs.forEach(src => { const i = new Image(); i.src = src; });
 
         function show(newIdx) {
@@ -314,6 +376,22 @@
         box.addEventListener('mouseleave', startTimer);
 
         startTimer();
+
+        // 2. 回到頂部按鈕控制
+        const topBtn = document.getElementById('ccs-back-to-top');
+        if (topBtn) {
+          window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+              topBtn.classList.add('show');
+            } else {
+              topBtn.classList.remove('show');
+            }
+          }, { passive: true });
+
+          topBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
       })();
     </script>
   </body>
