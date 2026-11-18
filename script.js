@@ -1,4 +1,4 @@
-/* 商品資料集中在此；推進器加購專區新增「什麼是推進器？」IG 影片連結。 */
+/* 商品資料集中在此；移除畫面說明與提示文字中的句號 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -929,7 +929,7 @@ window.CCOOL_SHOP = {
               }
             )
             .join('')
-        : '<div class="ccs-empty"><span>＋</span>購物車還空著。<br>挑一款喜歡的保護套吧。</div>';
+        : '<div class="ccs-empty"><span>＋</span>購物車還空著<br>挑一款喜歡的保護套吧</div>';
 
       // 渲染購物車內的固定「推進器加購區」（含「什麼是推進器？」IG 影片連結）
       if (cartAddonContainer && addon) {
@@ -1175,12 +1175,12 @@ window.CCOOL_SHOP = {
         } catch (error) {}
       }
       $('ccs-copy-status').textContent = ok
-        ? '已複製整份訂單，請貼至官方 LINE 並送出。'
-        : '請長按上方訂單內容，選取並複製。';
+        ? '已複製整份訂單，請貼至官方 LINE 並送出'
+        : '請長按上方訂單內容，選取並複製';
     });
     $('ccs-line').addEventListener('click', () => {
       $('ccs-copy-status').textContent =
-        '已嘗試開啟 LINE；請在聊天室按送出。若未開啟，可複製整份訂單。';
+        '已嘗試開啟 LINE；請在聊天室按送出，若未開啟可複製整份訂單';
     });
     renderProducts();
     renderCart();
