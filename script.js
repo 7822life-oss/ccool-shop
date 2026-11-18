@@ -1,4 +1,4 @@
-/* 商品資料集中在此；強制更新機型小分類列，移除小分類中的「T牌」，且點選「T牌保護盒」時完全隱藏小分類列。 */
+/* 商品資料集中在此；銀刻 LOGO 系列：7代為 K472、8代為 K473，並徹底修復購物車規格解析。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -196,7 +196,8 @@ window.CCOOL_SHOP = {
       image: 'https://i.meee.com.tw/2u4wgXu.png',
     },
     {
-      id: 'K372_LOGO',
+      // 銀刻LOGO系列：7代為 K472，8代為 K473
+      id: 'K472',
       name: '銀刻LOGO系列',
       color: '銀刻',
       series: '原創設計',
@@ -659,7 +660,9 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v36';
+      key = 'ccool-cart-v38',
+      SEP = '|'; // 改用直線 | 分隔商品 ID 與規格，徹底避免底線衝突
+
     const esc = (s) =>
       String(s).replace(
         /[&<>"']/g,
@@ -675,11 +678,17 @@ window.CCOOL_SHOP = {
     let cart = {},
       timer;
 
+    function parseCartKey(ck) {
+      const idx = ck.indexOf(SEP);
+      if (idx === -1) return [ck, ''];
+      return [ck.slice(0, idx), ck.slice(idx + 1)];
+    }
+
     try {
       const saved = JSON.parse(localStorage.getItem(key) || '{}');
       for (const k in saved) {
         const n = Number(saved[k]);
-        const baseId = k.split('_')[0];
+        const [baseId] = parseCartKey(k);
         if (map.has(baseId) && Number.isInteger(n) && n > 0 && n <= 99) {
           cart[k] = n;
         }
@@ -717,7 +726,7 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 強制建立或覆蓋機型次級篩選列（絕對只放 全部型號、7代、8代，徹底移除 T牌）
+    // 強制建立或覆蓋機型次級篩選列（只放 全部型號、7代、8代）
     let modelFilterContainer = root.querySelector('.ccs-model-filters');
     if (!modelFilterContainer) {
       modelFilterContainer = document.createElement('div');
@@ -741,7 +750,7 @@ window.CCOOL_SHOP = {
     }
 
     function formatDisplayName(item) {
-      if (!item.color || item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) {
+      if (!item.color || item.color === '原創' || item.color === '絕版' || item.color === '加購配件' || item.color === '尼胖聯名' || item.color === '銀刻' || item.color.includes('Stone') || item.color.includes('Maple') || item.color.includes('Oak') || item.color.includes('Ebony') || item.color.includes('Walnut')) {
         return item.name;
       }
       return `${item.name} · ${item.color}`;
@@ -767,11 +776,9 @@ window.CCOOL_SHOP = {
       }
 
       const filteredProducts = products.filter((p) => {
-        // 如果目前在「T牌保護盒」分類：只顯示 T牌保護盒
         if (isTBrandCategory) {
           return p.series === 'T牌保護盒';
         }
-        // 如果在其他分類（含「全部商品」）：絕對不混入 T牌保護盒
         if (p.series === 'T牌保護盒') {
           return false;
         }
@@ -788,9 +795,17 @@ window.CCOOL_SHOP = {
       $('ccs-grid').innerHTML = filteredProducts.length ? filteredProducts.map((p) => {
         let optHtml = '';
         let currentSku = p.id;
+        let currentImg = p.image;
         if (p.options && p.options.length > 0) {
-          currentSku = p.options[0].sku;
-          optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}">${esc(o.label)}</option>`).join('')}</select></div>`;
+          // 若目前篩選 8代，預設選中 8代 規格與對應 SKU (如 K473)
+          let defaultOpt = p.options[0];
+          if (currentModelFilter === '8代') {
+            const opt8 = p.options.find(o => o.value === '8代');
+            if (opt8) defaultOpt = opt8;
+          }
+          currentSku = defaultOpt.sku;
+          currentImg = defaultOpt.image || p.image;
+          optHtml = `<div style="margin: 8px 0;"><select data-opt="${esc(p.id)}" style="width:100%; padding:6px; background:#1c1c1c; color:#fff; border:1px solid #444; border-radius:6px; font-size:12px;">${p.options.map(o => `<option value="${esc(o.value)}" data-sku="${esc(o.sku)}" data-img="${esc(o.image || p.image)}" ${o.value === defaultOpt.value ? 'selected' : ''}>${esc(o.label)} (${esc(o.sku)})</option>`).join('')}</select></div>`;
         }
         const displayName = formatDisplayName(p);
         const skuText = p.color ? `${esc(currentSku)} / ${esc(p.color)}` : esc(currentSku);
@@ -810,7 +825,7 @@ window.CCOOL_SHOP = {
 
         return `<article class="ccs-product" data-product-card="${esc(p.id)}">
           <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
-            <img src="${esc(p.image)}" alt="${esc(p.id + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
+            <img src="${esc(currentImg)}" alt="${esc(currentSku + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
           </button>
           <div class="ccs-sku" data-sku-display="${esc(p.id)}">${skuText}</div>
           <h3>${esc(displayName)}</h3>
@@ -834,7 +849,7 @@ window.CCOOL_SHOP = {
     function rows() {
       return Object.entries(cart)
         .map(([cartKey, qty]) => {
-          const [id, spec] = cartKey.split('_');
+          const [id, spec] = parseCartKey(cartKey);
           const p = map.get(id);
           if (!p) return null;
           
@@ -1011,15 +1026,21 @@ window.CCOOL_SHOP = {
         const addonCheck = article.querySelector('[data-addon-check]');
         const p = map.get(id);
         const spec = optSelect ? optSelect.value : p.model;
-        const cartKey = id + '_' + spec;
+        const cartKey = id + SEP + spec;
         
+        let selectedSku = p.id;
+        if (p.options && optSelect) {
+          const matched = p.options.find(o => o.value === spec);
+          if (matched) selectedSku = matched.sku;
+        }
+
         const n = quantity(input);
         const old = cart[cartKey] || 0;
         cart[cartKey] = Math.min(99, old + n);
 
         let addonAdded = false;
         if (addon && addonCheck && addonCheck.checked) {
-          const addonKey = addon.id + '_' + addon.model;
+          const addonKey = addon.id + SEP + addon.model;
           cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + n);
           addonCheck.checked = false;
           addonAdded = true;
@@ -1029,14 +1050,14 @@ window.CCOOL_SHOP = {
         const fullTitle = formatDisplayName(p);
         notify(
           addonAdded
-            ? `已加入：${fullTitle} (${spec}) ＋ ${addon.name}`
-            : `已加入購物車：${fullTitle} (${spec})`
+            ? `已加入：${selectedSku} ${fullTitle} (${spec}) ＋ ${addon.name}`
+            : `已加入購物車：${selectedSku} ${fullTitle} (${spec})`
         );
       }
 
       // 大圖彈窗內直接加購推進器
       if (b.hasAttribute('data-zoom-add-addon') && addon) {
-        const addonKey = addon.id + '_' + addon.model;
+        const addonKey = addon.id + SEP + addon.model;
         cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + 1);
         renderCart();
         notify(`已加購：${addon.name} (+${money(addon.price)})`);
@@ -1053,14 +1074,20 @@ window.CCOOL_SHOP = {
           const d = $('ccs-zoom');
           const card = b.closest('[data-product-card]');
           let activeImg = p.image;
+          let activeSku = p.id;
           if (card) {
             const imgTarget = card.querySelector('[data-img-target]');
+            const optSelect = card.querySelector('[data-opt]');
             if (imgTarget) activeImg = imgTarget.src;
+            if (optSelect && p.options) {
+              const matched = p.options.find(o => o.value === optSelect.value);
+              if (matched) activeSku = matched.sku;
+            }
           }
           const fullTitle = formatDisplayName(p);
           d.querySelector('img').src = activeImg;
           d.querySelector('img').alt = fullTitle;
-          d.querySelector('p').textContent = p.id + '｜' + fullTitle + '｜適用 ' + p.model + '｜僅保護套，不含機身';
+          d.querySelector('p').textContent = activeSku + '｜' + fullTitle + '｜適用 ' + p.model + '｜僅保護套，不含機身';
 
           // 在大圖彈窗內動態加入推進器加購列（T牌保護盒不顯示）
           let zoomAddonBox = d.querySelector('.ccs-zoom-addon');
