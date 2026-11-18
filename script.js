@@ -1,9 +1,9 @@
-/* 商品資料集中在此；推進器改為統一於購物車內加購（初始數量 0，自由調整數量）。 */
+/* 商品資料集中在此；推進器加購專區新增「什麼是推進器？」IG 影片連結。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
   shipping: 60,
-  // 推進器加購設定（價格 NT$69，不顯示 SKU，統一在購物車加購）
+  // 推進器加購設定（價格 NT$69，不顯示 SKU，統一在購物車加購並附 IG 影片連結）
   addon: {
     id: 'ADDON',
     hideSku: true,
@@ -13,6 +13,7 @@ window.CCOOL_SHOP = {
     model: '通用配件',
     price: 69,
     image: 'https://i.meee.com.tw/wuahaw1.jpg',
+    videoUrl: 'https://www.instagram.com/reel/DZWkX64ASc_/',
   },
   products: [
     {
@@ -893,7 +894,6 @@ window.CCOOL_SHOP = {
 
     function renderCart() {
       const allList = rows(),
-        // 一般商品清單（不含推進器，推進器獨立顯示在下方的固定加購區）
         mainList = allList.filter((item) => !addon || item.id !== addon.id),
         t = totals();
       root.querySelectorAll('[data-count]').forEach((el) => (el.textContent = t.count));
@@ -931,9 +931,12 @@ window.CCOOL_SHOP = {
             .join('')
         : '<div class="ccs-empty"><span>＋</span>購物車還空著。<br>挑一款喜歡的保護套吧。</div>';
 
-      // 渲染購物車內的固定「推進器加購區」（初始數量為 0，可自由增減）
+      // 渲染購物車內的固定「推進器加購區」（含「什麼是推進器？」IG 影片連結）
       if (cartAddonContainer && addon) {
         const addonQty = cart[addonCartKey] || 0;
+        const videoLinkHtml = addon.videoUrl
+          ? `<a href="${esc(addon.videoUrl)}" target="_blank" rel="noopener" style="display: inline-block; margin-top: 4px; font-size: 11px; color: #e1306c; font-weight: 600; text-decoration: underline;">什麼是推進器？ ↗</a>`
+          : '';
         cartAddonContainer.innerHTML = `
           <div class="ccs-cart-addon-head">🔥 配件加購專區</div>
           <div class="ccs-cart-addon-body">
@@ -943,6 +946,7 @@ window.CCOOL_SHOP = {
             <div class="ccs-cart-addon-info">
               <h3>${esc(addon.name)}</h3>
               <small>加購價 <b>${money(addon.price)}</b> / 個</small>
+              ${videoLinkHtml}
               ${addonQty > 0 ? `<span class="ccs-cart-addon-sub">已加購 ${addonQty} 個（${money(addon.price * addonQty)}）</span>` : ''}
             </div>
             ${step(addonCartKey, addonQty)}
