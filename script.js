@@ -1,9 +1,9 @@
-/* 商品資料集中在此；銀刻 LOGO 系列：7代為 K472、8代為 K473，並徹底修復購物車規格解析。 */
+/* 商品資料集中在此；推進器改為統一於購物車內加購（初始數量 0，自由調整數量）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
   shipping: 60,
-  // 推進器加購設定（價格 NT$69，不顯示 SKU）
+  // 推進器加購設定（價格 NT$69，不顯示 SKU，統一在購物車加購）
   addon: {
     id: 'ADDON',
     hideSku: true,
@@ -12,7 +12,7 @@ window.CCOOL_SHOP = {
     series: '配件加購',
     model: '通用配件',
     price: 69,
-    image: 'https://i.meee.com.tw/OEd9CUr.png',
+    image: 'https://i.meee.com.tw/wuahaw1.jpg',
   },
   products: [
     {
@@ -660,8 +660,9 @@ window.CCOOL_SHOP = {
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
-      key = 'ccool-cart-v38',
-      SEP = '|'; // 改用直線 | 分隔商品 ID 與規格，徹底避免底線衝突
+      key = 'ccool-cart-v39',
+      SEP = '|',
+      addonCartKey = addon ? addon.id + SEP + addon.model : '';
 
     const esc = (s) =>
       String(s).replace(
@@ -740,6 +741,16 @@ window.CCOOL_SHOP = {
       <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
     `;
 
+    // 在購物車區塊內（小計上方）建立固定的「推進器加購專區」
+    let cartAddonContainer = root.querySelector('#ccs-cart-addon');
+    if (!cartAddonContainer && addon) {
+      cartAddonContainer = document.createElement('div');
+      cartAddonContainer.id = 'ccs-cart-addon';
+      cartAddonContainer.className = 'ccs-cart-addon';
+      const totalsEl = root.querySelector('.ccs-totals');
+      if (totalsEl) totalsEl.before(cartAddonContainer);
+    }
+
     // 右下角懸浮浮動視窗收合展開控制
     const floatBanner = $('ccs-float-banner');
     const floatToggle = $('ccs-float-toggle');
@@ -797,7 +808,6 @@ window.CCOOL_SHOP = {
         let currentSku = p.id;
         let currentImg = p.image;
         if (p.options && p.options.length > 0) {
-          // 若目前篩選 8代，預設選中 8代 規格與對應 SKU (如 K473)
           let defaultOpt = p.options[0];
           if (currentModelFilter === '8代') {
             const opt8 = p.options.find(o => o.value === '8代');
@@ -815,14 +825,6 @@ window.CCOOL_SHOP = {
           promoHtml = `<div style="color: #ff4d4f; font-size: 12px; font-weight: 700; margin-bottom: 8px;">🔥 兩件 $799</div>`;
         }
 
-        // 7、8代保護套顯示「加購推進器」勾選框；T牌保護盒不顯示
-        const addonHtml = (addon && p.series !== 'T牌保護盒') ? `
-          <label class="ccs-addon-box">
-            <input type="checkbox" data-addon-check="${esc(p.id)}" />
-            <span>＋加購：${esc(addon.name)} (<b>+${money(addon.price)}</b>)</span>
-          </label>
-        ` : '';
-
         return `<article class="ccs-product" data-product-card="${esc(p.id)}">
           <button type="button" class="ccs-product-photo" data-zoom="${esc(p.id)}" aria-label="查看${esc(p.name)}大圖">
             <img src="${esc(currentImg)}" alt="${esc(currentSku + ' ' + p.name)}" loading="lazy" data-img-target="${esc(p.id)}">
@@ -833,7 +835,6 @@ window.CCOOL_SHOP = {
           ${optHtml}
           <strong class="ccs-price">${money(p.price)}</strong>
           ${promoHtml}
-          ${addonHtml}
           <div class="ccs-product-actions">
             <div class="ccs-step">
               <button type="button" data-prod-step="-1" data-id="${esc(p.id)}" aria-label="減少">−</button>
@@ -891,7 +892,9 @@ window.CCOOL_SHOP = {
     }
 
     function renderCart() {
-      const list = rows(),
+      const allList = rows(),
+        // 一般商品清單（不含推進器，推進器獨立顯示在下方的固定加購區）
+        mainList = allList.filter((item) => !addon || item.id !== addon.id),
         t = totals();
       root.querySelectorAll('[data-count]').forEach((el) => (el.textContent = t.count));
       $('ccs-sub').textContent = money(t.sub);
@@ -900,8 +903,8 @@ window.CCOOL_SHOP = {
       $('ccs-mobile-total').textContent = money(t.total);
       $('ccs-checkout').disabled = !t.count;
       
-      $('ccs-items').innerHTML = list.length
-        ? list
+      $('ccs-items').innerHTML = mainList.length
+        ? mainList
             .map(
               (item) => {
                 let itemImage = item.image;
@@ -927,6 +930,26 @@ window.CCOOL_SHOP = {
             )
             .join('')
         : '<div class="ccs-empty"><span>＋</span>購物車還空著。<br>挑一款喜歡的保護套吧。</div>';
+
+      // 渲染購物車內的固定「推進器加購區」（初始數量為 0，可自由增減）
+      if (cartAddonContainer && addon) {
+        const addonQty = cart[addonCartKey] || 0;
+        cartAddonContainer.innerHTML = `
+          <div class="ccs-cart-addon-head">🔥 配件加購專區</div>
+          <div class="ccs-cart-addon-body">
+            <button type="button" class="ccs-cart-addon-thumb" data-zoom="${esc(addon.id)}" aria-label="查看${esc(addon.name)}大圖">
+              <img src="${esc(addon.image)}" alt="${esc(addon.name)}">
+            </button>
+            <div class="ccs-cart-addon-info">
+              <h3>${esc(addon.name)}</h3>
+              <small>加購價 <b>${money(addon.price)}</b> / 個</small>
+              ${addonQty > 0 ? `<span class="ccs-cart-addon-sub">已加購 ${addonQty} 個（${money(addon.price * addonQty)}）</span>` : ''}
+            </div>
+            ${step(addonCartKey, addonQty)}
+          </div>
+        `;
+      }
+
       if (!t.count) $('ccs-delivery').hidden = true;
       persist();
     }
@@ -1017,13 +1040,12 @@ window.CCOOL_SHOP = {
         renderCart();
       }
 
-      // 加入購物車（若勾選加購推進器，一併加入）
+      // 加入購物車
       if (b.dataset.add) {
         const id = b.dataset.add;
         const article = b.closest('article');
         const input = article.querySelector('[data-prod-qty]');
         const optSelect = article.querySelector('[data-opt]');
-        const addonCheck = article.querySelector('[data-addon-check]');
         const p = map.get(id);
         const spec = optSelect ? optSelect.value : p.model;
         const cartKey = id + SEP + spec;
@@ -1038,29 +1060,9 @@ window.CCOOL_SHOP = {
         const old = cart[cartKey] || 0;
         cart[cartKey] = Math.min(99, old + n);
 
-        let addonAdded = false;
-        if (addon && addonCheck && addonCheck.checked) {
-          const addonKey = addon.id + SEP + addon.model;
-          cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + n);
-          addonCheck.checked = false;
-          addonAdded = true;
-        }
-
         renderCart();
         const fullTitle = formatDisplayName(p);
-        notify(
-          addonAdded
-            ? `已加入：${selectedSku} ${fullTitle} (${spec}) ＋ ${addon.name}`
-            : `已加入購物車：${selectedSku} ${fullTitle} (${spec})`
-        );
-      }
-
-      // 大圖彈窗內直接加購推進器
-      if (b.hasAttribute('data-zoom-add-addon') && addon) {
-        const addonKey = addon.id + SEP + addon.model;
-        cart[addonKey] = Math.min(99, (cart[addonKey] || 0) + 1);
-        renderCart();
-        notify(`已加購：${addon.name} (+${money(addon.price)})`);
+        notify(`已加入購物車：${selectedSku} ${fullTitle} (${spec})`);
       }
 
       if (b.dataset.remove) {
@@ -1074,7 +1076,7 @@ window.CCOOL_SHOP = {
           const d = $('ccs-zoom');
           const card = b.closest('[data-product-card]');
           let activeImg = p.image;
-          let activeSku = p.id;
+          let activeSku = p.hideSku ? '' : p.id;
           if (card) {
             const imgTarget = card.querySelector('[data-img-target]');
             const optSelect = card.querySelector('[data-opt]');
@@ -1087,25 +1089,9 @@ window.CCOOL_SHOP = {
           const fullTitle = formatDisplayName(p);
           d.querySelector('img').src = activeImg;
           d.querySelector('img').alt = fullTitle;
-          d.querySelector('p').textContent = activeSku + '｜' + fullTitle + '｜適用 ' + p.model + '｜僅保護套，不含機身';
-
-          // 在大圖彈窗內動態加入推進器加購列（T牌保護盒不顯示）
-          let zoomAddonBox = d.querySelector('.ccs-zoom-addon');
-          if (!zoomAddonBox && addon) {
-            zoomAddonBox = document.createElement('div');
-            zoomAddonBox.className = 'ccs-zoom-addon';
-            zoomAddonBox.innerHTML = `
-              <div>
-                <strong>🔧 配件加購：${esc(addon.name)}</strong>
-                <small>搭配保護套更順手・優惠加購價 ${money(addon.price)}</small>
-              </div>
-              <button type="button" data-zoom-add-addon>＋ 加購 1 件</button>
-            `;
-            d.appendChild(zoomAddonBox);
-          }
-          if (zoomAddonBox) {
-            zoomAddonBox.style.display = (p.series === 'T牌保護盒') ? 'none' : 'flex';
-          }
+          d.querySelector('p').textContent = activeSku
+            ? `${activeSku}｜${fullTitle}｜適用 ${p.model}｜僅保護套，不含機身`
+            : `${fullTitle}｜加購價 ${money(p.price)}`;
 
           d.showModal();
         }
