@@ -15,16 +15,16 @@
     <meta property="og:url" content="https://7822life.github.io/ccool-shop/" />
     <meta property="og:type" content="website" />
 
-    <!-- 加上 v=100 強制突破瀏覽器快取 -->
-    <link rel="stylesheet" href="styles.css?v=100" />
-    <script type="module" src="script.js?v=100"></script>
+    <!-- 加上 v=101 強制突破瀏覽器快取 -->
+    <link rel="stylesheet" href="styles.css?v=101" />
+    <script type="module" src="script.js?v=101"></script>
     <script>
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('copy', event => event.preventDefault());
       document.addEventListener('selectstart', event => event.preventDefault());
     </script>
     <style>
-      /* 回到頂部按鈕樣式（獨立於 styles.css，避開右下角圖片與手機底部購物車） */
+      /* 1. 回到頂部按鈕樣式 */
       #ccs-back-to-top {
         position: fixed;
         bottom: 24px;
@@ -70,12 +70,51 @@
         line-height: 1;
         margin-top: 2px;
       }
+
+      /* 2. 右下角警告視窗：收合後直接變成單純的小圓圈，不留邊框擋字 */
+      #ccs #ccs-float-banner.collapsed {
+        transform: none !important;
+      }
+      #ccs #ccs-float-banner.collapsed .ccs-float-content {
+        display: none !important;
+      }
+      #ccs #ccs-float-banner.collapsed #ccs-float-toggle {
+        position: static !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: rgba(28, 28, 28, 0.92) !important;
+        border: 1px solid #666 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+      }
+      #ccs #ccs-float-banner.collapsed #ccs-float-toggle span {
+        transform: none !important;
+        font-size: 18px !important;
+      }
+
+      /* 3. 手機版專屬設定：隱藏輪播箭頭與圓點、墊高浮動按鈕避開底部購物車列 */
       @media (max-width: 760px) {
+        #hero-prev,
+        #hero-next,
+        #hero-dots {
+          display: none !important;
+        }
         #ccs-back-to-top {
-          bottom: 84px; /* 避開手機版底部固定購物車列 */
+          bottom: 84px;
           left: 16px;
           width: 40px;
           height: 40px;
+        }
+        #ccs #ccs-float-banner {
+          bottom: 84px !important;
+          right: 16px !important;
+        }
+        #ccs #ccs-float-banner .ccs-float-content {
+          width: min(260px, calc(100vw - 48px)) !important;
+        }
+        #ccs #ccs-float-banner.collapsed #ccs-float-toggle {
+          width: 40px !important;
+          height: 40px !important;
         }
       }
     </style>
@@ -103,13 +142,13 @@
             <p>原創設計 熱銷日韓</p>
           </div>
           
-          <!-- 獨立自帶樣式的單圖輪播框（絕對不歪掉） -->
-          <div id="hero-box" style="position: relative; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid #393939; background: #181818;">
+          <!-- 獨立自帶樣式的單圖輪播框（支援手機手指左右滑動，手機版自動隱藏箭頭與圓點） -->
+          <div id="hero-box" style="position: relative; width: 100%; border-radius: 16px; overflow: hidden; border: 1px solid #393939; background: #181818; touch-action: pan-y;">
             <img
               id="hero-slide-img"
               src="https://i.meee.com.tw/fxs5LcA.jpg"
               alt="C.COOL 輪播圖"
-              style="width: 100%; height: auto; display: block; margin: 0 auto; transition: opacity 0.25s ease;"
+              style="width: 100%; height: auto; display: block; margin: 0 auto; transition: opacity 0.25s ease; user-select: none;"
             />
             <button
               type="button"
@@ -270,7 +309,7 @@
         <small>TOP</small>
       </button>
 
-      <!-- 右下角懸浮浮動視窗 -->
+      <!-- 右下角懸浮浮動視窗（收合後直接變成 ⚠️ 小圓圈） -->
       <div id="ccs-float-banner" class="ccs-float-banner">
         <button type="button" id="ccs-float-toggle" aria-label="收起或展開提示圖片">
           <span>⚠️</span>
@@ -307,10 +346,10 @@
       </dialog>
     </div>
 
-    <!-- 獨立輪播與回到頂部控制腳本 -->
+    <!-- 獨立輪播（含手機滑動觸控）與回到頂部控制腳本 -->
     <script>
       (() => {
-        // 1. 輪播牆控制
+        // 1. 輪播牆控制（自動輪播＋電腦版箭頭圓點＋手機版手指左右滑動）
         const imgs = [
           'https://i.meee.com.tw/fxs5LcA.jpg',
           'https://i.meee.com.tw/wKH7qdf.jpg',
@@ -371,6 +410,28 @@
             startTimer();
           });
         });
+
+        // 手機觸控左右滑動支援
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        box.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+          clearInterval(timer);
+        }, { passive: true });
+
+        box.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const diff = touchStartX - touchEndX;
+          if (Math.abs(diff) > 40) {
+            if (diff > 0) {
+              show(idx + 1); // 往左滑：下一張
+            } else {
+              show(idx - 1); // 往右滑：上一張
+            }
+          }
+          startTimer();
+        }, { passive: true });
 
         box.addEventListener('mouseenter', () => clearInterval(timer));
         box.addEventListener('mouseleave', startTimer);
