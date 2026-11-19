@@ -1,4 +1,4 @@
-/* 商品資料集中在此；移除畫面說明與提示文字中的句號 */
+/* 商品資料集中在此；已埋入 Meta Pixel「Purchase」購買轉換追蹤碼（含金額與防重複計算）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -678,7 +678,23 @@ window.CCOOL_SHOP = {
           }[c])
       );
     let cart = {},
-      timer;
+      timer,
+      purchaseTracked = false;
+
+    function trackPurchase() {
+      if (purchaseTracked || typeof window.fbq !== 'function') return;
+      const t = totals();
+      const list = rows();
+      if (!t.count) return;
+      window.fbq('track', 'Purchase', {
+        value: t.total,
+        currency: 'TWD',
+        num_items: t.count,
+        content_type: 'product',
+        content_ids: list.map((item) => item.displayId || item.id),
+      });
+      purchaseTracked = true;
+    }
 
     function parseCartKey(ck) {
       const idx = ck.indexOf(SEP);
@@ -1159,10 +1175,12 @@ window.CCOOL_SHOP = {
         encodeURIComponent(config.lineId) +
         '/?' +
         encodeURIComponent(lines.join('\n'));
+      purchaseTracked = false; // 每次開啟新訂單確認視窗時重置追蹤狀態
       $('ccs-review').showModal();
     });
 
     $('ccs-copy').addEventListener('click', async () => {
+      trackPurchase(); // 觸發 Meta Pixel Purchase 事件
       let ok = false;
       try {
         await navigator.clipboard.writeText($('ccs-message').value);
@@ -1179,6 +1197,7 @@ window.CCOOL_SHOP = {
         : '請長按上方訂單內容，選取並複製';
     });
     $('ccs-line').addEventListener('click', () => {
+      trackPurchase(); // 觸發 Meta Pixel Purchase 事件
       $('ccs-copy-status').textContent =
         '已嘗試開啟 LINE；請在聊天室按送出，若未開啟可複製整份訂單';
     });
