@@ -1,4 +1,4 @@
-/* 商品資料集中在此；已埋入 Meta Pixel「Purchase」與 GA4「purchase」購買轉換追蹤碼（含實際金額與防重複計算）。 */
+/* 商品資料集中在此；Meta Pixel「Purchase」與 GA4「purchase」均已改為追蹤純商品小計（不含運費）。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -688,7 +688,7 @@ window.CCOOL_SHOP = {
       if (!t.count) return;
       if (typeof window.fbq === 'function') {
         window.fbq('track', 'Purchase', {
-          value: t.total,
+          value: t.sub, // 純商品小計（不含運費）
           currency: 'TWD',
           num_items: t.count,
           content_type: 'product',
@@ -699,7 +699,7 @@ window.CCOOL_SHOP = {
         window.gtag('event', 'purchase', {
           transaction_id: 'ORDER_' + Date.now(),
           currency: 'TWD',
-          value: t.total,
+          value: t.sub, // 純商品小計（不含運費）
         });
       }
       purchaseTracked = true;
