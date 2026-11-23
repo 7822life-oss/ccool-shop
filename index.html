@@ -23,9 +23,9 @@
     <meta property="og:url" content="https://7822life.github.io/ccool-shop/" />
     <meta property="og:type" content="website" />
 
-    <!-- 加上 v=105 強制突破瀏覽器快取 -->
-    <link rel="stylesheet" href="styles.css?v=105" />
-    <script type="module" src="script.js?v=105"></script>
+    <!-- 加上 v=106 強制突破瀏覽器快取 -->
+    <link rel="stylesheet" href="styles.css?v=106" />
+    <script type="module" src="script.js?v=106"></script>
     <script>
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('copy', event => event.preventDefault());
@@ -366,12 +366,12 @@
         </div>
         <p>請核對下方明細，開啟 LINE 後記得再按「送出」</p>
         <textarea id="ccs-message" readonly aria-label="訂單完整內容"></textarea>
-        <a id="ccs-line" class="ccs-line" target="_blank" rel="noopener">
+        <p style="color: #ff4d4f; font-weight: 700; font-size: 13px; text-align: center; margin: 14px 0 8px;">請務必送出訂購訊息 才是完成訂購</p>
+        <a id="ccs-line" class="ccs-line" style="margin-top: 0;" target="_blank" rel="noopener">
           開啟 LINE 並帶入訂單 ↗
         </a>
         <div class="ccs-review-actions">
-          <button type="button" id="ccs-copy">複製整份訂單</button>
-          <button type="button" data-close>返回修改</button>
+          <button type="button" id="ccs-close-back" data-close>返回修改</button>
         </div>
         <p id="ccs-copy-status" role="status"></p>
       </dialog>
