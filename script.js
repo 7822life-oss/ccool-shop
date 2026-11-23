@@ -1188,27 +1188,10 @@ window.CCOOL_SHOP = {
       $('ccs-review').showModal();
     });
 
-    $('ccs-copy').addEventListener('click', async () => {
-      trackPurchase(); // 觸發 Meta Pixel 與 GA4 購買事件
-      let ok = false;
-      try {
-        await navigator.clipboard.writeText($('ccs-message').value);
-        ok = true;
-      } catch (error) {
-        $('ccs-message').focus();
-        $('ccs-message').select();
-        try {
-          ok = document.execCommand('copy');
-        } catch (error) {}
-      }
-      $('ccs-copy-status').textContent = ok
-        ? '已複製整份訂單，請貼至官方 LINE 並送出'
-        : '請長按上方訂單內容，選取並複製';
-    });
     $('ccs-line').addEventListener('click', () => {
       trackPurchase(); // 觸發 Meta Pixel 與 GA4 購買事件
       $('ccs-copy-status').textContent =
-        '已嘗試開啟 LINE；請在聊天室按送出，若未開啟可複製整份訂單';
+        '已開啟 LINE，請在聊天室按「送出」才算完成訂購';
     });
     renderProducts();
     renderCart();
