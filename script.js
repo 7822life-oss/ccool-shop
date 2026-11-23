@@ -1,4 +1,4 @@
-/* 商品資料集中在此；Meta Pixel「Purchase」與 GA4「purchase」均已改為追蹤純商品小計（不含運費）。 */
+/* 商品資料集中在此；收件人姓名新增至少 2 個字防呆驗證。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -1147,7 +1147,13 @@ window.CCOOL_SHOP = {
       for (const name of ['receiver', 'phone', 'store', 'invoice', 'note'])
         f[name].value = f[name].value.trim();
       f.invoice.value = f.invoice.value.toUpperCase();
-      f.receiver.setCustomValidity(f.receiver.value ? '' : '請填寫收件人姓名');
+      if (!f.receiver.value) {
+        f.receiver.setCustomValidity('請填寫收件人姓名');
+      } else if ([...f.receiver.value].length < 2) {
+        f.receiver.setCustomValidity('收件人姓名至少需填寫 2 個字');
+      } else {
+        f.receiver.setCustomValidity('');
+      }
       f.store.setCustomValidity(f.store.value ? '' : '請填寫門市店名或代碼');
       f.invoice.setCustomValidity(
         !f.invoice.value || /^\/[A-Z0-9+.-]{7}$/.test(f.invoice.value)
