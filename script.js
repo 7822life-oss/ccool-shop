@@ -1,4 +1,4 @@
-/* 商品資料集中在此；收件人姓名新增至少 2 個字防呆驗證。 */
+/* 商品資料集中在此；已新增「中階」分類與 K443、K451、K452、K453 四款商品。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -505,6 +505,43 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/P8P5YRO.jpg'
     },
+    // 中階系列（獨立分類）
+    {
+      id: 'K443',
+      name: 'TPU透明',
+      color: '',
+      series: '中階',
+      model: '中階',
+      price: 250,
+      image: 'https://i.meee.com.tw/dQfUO8q.jpg',
+    },
+    {
+      id: 'K451',
+      name: '矽膠殼+側蓋',
+      color: '黑灰色',
+      series: '中階',
+      model: '中階',
+      price: 350,
+      image: 'https://i.meee.com.tw/5sRDCMl.jpg',
+    },
+    {
+      id: 'K452',
+      name: '小熊殼+側蓋',
+      color: '卡其色',
+      series: '中階',
+      model: '中階',
+      price: 450,
+      image: 'https://i.meee.com.tw/84v86YT.jpg',
+    },
+    {
+      id: 'K453',
+      name: '小熊殼+側蓋',
+      color: '深棕色',
+      series: '中階',
+      model: '中階',
+      price: 450,
+      image: 'https://i.meee.com.tw/tTPKkcs.jpg',
+    },
     // T牌保護盒系列（獨立分類，不與 7、8 代混排）
     {
       id: 'K387',
@@ -806,15 +843,19 @@ window.CCOOL_SHOP = {
     function renderProducts() {
       const selectedSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
       const isTBrandCategory = selectedSeries === 'T牌保護盒';
+      const isMidTierCategory = selectedSeries === '中階';
 
-      // 當點選「T牌保護盒」時，完全隱藏下方的機型小分類列
+      // 當點選「T牌保護盒」或「中階」時，隱藏下方的 7代/8代 機型小分類列
       if (modelFilterContainer) {
-        modelFilterContainer.style.display = isTBrandCategory ? 'none' : 'flex';
+        modelFilterContainer.style.display = (isTBrandCategory || isMidTierCategory) ? 'none' : 'flex';
       }
 
       const filteredProducts = products.filter((p) => {
         if (isTBrandCategory) {
           return p.series === 'T牌保護盒';
+        }
+        if (isMidTierCategory) {
+          return p.series === '中階';
         }
         if (p.series === 'T牌保護盒') {
           return false;
