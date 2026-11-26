@@ -1,4 +1,4 @@
-/* 商品資料集中在此；「中階」改名為「中階主機看這裡」，並在「全部商品」子索引新增「中階型號」與「T牌保護盒」。 */
+/* 商品資料集中在此；「原創設計」已切出 9 個系列子索引，並預留 subSeriesBanners 專屬 BANNER 設定區。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -6,6 +6,18 @@ window.CCOOL_SHOP = {
   // 滿額贈設定（不含運費滿 999 送 T 牌保護盒，排除 K441、K619）
   giftThreshold: 999,
   giftExcludedIds: ['K441', 'K619'],
+  // 原創設計各子系列專屬 BANNER 預留區（之後填入圖片網址就會自動顯示）
+  subSeriesBanners: {
+    '台灣系列': '',
+    '玄木系列': '',
+    '岩系列': '',
+    '花磚系列': '',
+    '麻將系列': '',
+    '德州撲克': '',
+    '原創特色': '',
+    '銀刻LOGO': '',
+    '聯名款': '',
+  },
   // 推進器加購設定（價格 NT$69，不顯示 SKU，統一在購物車加購並附 IG 影片連結）
   addon: {
     id: 'ADDON',
@@ -205,6 +217,7 @@ window.CCOOL_SHOP = {
       name: '銀刻LOGO系列',
       color: '銀刻',
       series: '原創設計',
+      subSeries: '銀刻LOGO',
       model: '7代/8代',
       price: 399,
       image: 'https://i.meee.com.tw/qh1rIbu.jpg',
@@ -218,6 +231,7 @@ window.CCOOL_SHOP = {
       name: '台灣系列：水果紙箱',
       color: '原創',
       series: '原創設計',
+      subSeries: '台灣系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/3talTIk.jpg',
@@ -227,6 +241,7 @@ window.CCOOL_SHOP = {
       name: '台灣系列：台灣記憶',
       color: '原創',
       series: '原創設計',
+      subSeries: '台灣系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/1xBkzNX.jpg',
@@ -236,6 +251,7 @@ window.CCOOL_SHOP = {
       name: '台灣系列：啤酒肚小熊',
       color: '原創',
       series: '原創設計',
+      subSeries: '台灣系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/EQr1xUE.jpg',
@@ -245,6 +261,7 @@ window.CCOOL_SHOP = {
       name: '玄木系列：赤楓',
       color: 'Red Maple',
       series: '原創設計',
+      subSeries: '玄木系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/j1FDLat.png',
@@ -254,6 +271,7 @@ window.CCOOL_SHOP = {
       name: '玄木系列：白橡',
       color: 'White Oak',
       series: '原創設計',
+      subSeries: '玄木系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/CKNTzfC.png',
@@ -263,6 +281,7 @@ window.CCOOL_SHOP = {
       name: '玄木系列：黑檀',
       color: 'Ebony',
       series: '原創設計',
+      subSeries: '玄木系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/C0LJEnp.png',
@@ -272,6 +291,7 @@ window.CCOOL_SHOP = {
       name: '玄木系列：胡桃',
       color: 'Dark Walnut',
       series: '原創設計',
+      subSeries: '玄木系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/URhFw34.png',
@@ -281,6 +301,7 @@ window.CCOOL_SHOP = {
       name: '岩系列：霧岩',
       color: 'Onyx Stone',
       series: '原創設計',
+      subSeries: '岩系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/5c0CpGR.jpg',
@@ -290,6 +311,7 @@ window.CCOOL_SHOP = {
       name: '岩系列：墨岩',
       color: 'Mist Stone',
       series: '原創設計',
+      subSeries: '岩系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/J2O860g.jpg',
@@ -299,6 +321,7 @@ window.CCOOL_SHOP = {
       name: '岩系列：赤岩',
       color: 'Iron Stone',
       series: '原創設計',
+      subSeries: '岩系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/HKojyj7.jpg',
@@ -308,6 +331,7 @@ window.CCOOL_SHOP = {
       name: '花磚系列：海棠花窗',
       color: '原創',
       series: '原創設計',
+      subSeries: '花磚系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/DAx27CK.jpg',
@@ -317,6 +341,7 @@ window.CCOOL_SHOP = {
       name: '花磚系列：黑色花磚',
       color: '原創',
       series: '原創設計',
+      subSeries: '花磚系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/noFFbrN.jpg',
@@ -326,6 +351,7 @@ window.CCOOL_SHOP = {
       name: '麻將：白底',
       color: '原創',
       series: '原創設計',
+      subSeries: '麻將系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/aMDtWYc.jpg',
@@ -335,6 +361,7 @@ window.CCOOL_SHOP = {
       name: '麻將：滿版',
       color: '原創',
       series: '原創設計',
+      subSeries: '麻將系列',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/vBuvuM9.jpg',
@@ -344,6 +371,7 @@ window.CCOOL_SHOP = {
       name: '聯名款：可愛尼胖',
       color: '尼胖聯名',
       series: '原創設計',
+      subSeries: '聯名款',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/R3QogcE.jpg',
@@ -353,6 +381,7 @@ window.CCOOL_SHOP = {
       name: '原創系列：吞金喵',
       color: '原創',
       series: '原創設計',
+      subSeries: '原創特色',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/tWPlkr9.jpg',
@@ -362,6 +391,7 @@ window.CCOOL_SHOP = {
       name: '原創系列：惡魔骷髏',
       color: '原創',
       series: '原創設計',
+      subSeries: '原創特色',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/vtoaojI.jpg',
@@ -371,6 +401,7 @@ window.CCOOL_SHOP = {
       name: '原創系列：撲克牌',
       color: '原創',
       series: '原創設計',
+      subSeries: '原創特色',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/rwqkpQi.jpg',
@@ -380,6 +411,7 @@ window.CCOOL_SHOP = {
       name: '德州撲克：綠底',
       color: '原創',
       series: '原創設計',
+      subSeries: '德州撲克',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/eDePlln.jpg',
@@ -389,6 +421,7 @@ window.CCOOL_SHOP = {
       name: '德州撲克：紅底',
       color: '原創',
       series: '原創設計',
+      subSeries: '德州撲克',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/5s9n28C.jpg',
@@ -398,6 +431,7 @@ window.CCOOL_SHOP = {
       name: '德州撲克：黑底',
       color: '原創',
       series: '原創設計',
+      subSeries: '德州撲克',
       model: '7、8代通用',
       price: 599,
       image: 'https://i.meee.com.tw/TcVTXDi.jpg',
@@ -699,6 +733,7 @@ window.CCOOL_SHOP = {
       addon = config.addon,
       giftThreshold = config.giftThreshold || 999,
       giftExcludedIds = config.giftExcludedIds || ['K441', 'K619'],
+      subSeriesBanners = config.subSeriesBanners || {},
       giftOptions = products.filter(
         (p) => p.series === 'T牌保護盒' && !giftExcludedIds.includes(p.id)
       ),
@@ -791,8 +826,27 @@ window.CCOOL_SHOP = {
     const rawSeries = [...new Set(products.map((p) => p.series))];
     const series = ['原創設計', ...rawSeries.filter(s => s !== '原創設計')];
 
+    // 原創設計子系列順序
+    const originalSubSeriesOrder = [
+      '台灣系列',
+      '玄木系列',
+      '岩系列',
+      '花磚系列',
+      '麻將系列',
+      '德州撲克',
+      '原創特色',
+      '銀刻LOGO',
+      '聯名款',
+    ];
+    const existingSubSeries = [...new Set(products.filter(p => p.series === '原創設計' && p.subSeries).map(p => p.subSeries))];
+    const originalSubSeries = [
+      ...originalSubSeriesOrder.filter(s => existingSubSeries.includes(s)),
+      ...existingSubSeries.filter(s => !originalSubSeriesOrder.includes(s)),
+    ];
+
     let currentSeriesIndex = 0; // 0 代表全部商品
     let currentModelFilter = 'all'; // 'all', '7代', '8代', '中階型號', 'T牌保護盒'
+    let currentOriginalSubFilter = 'all'; // 'all' 或原創子系列名稱
 
     // 渲染大分類篩選列
     const filtersContainer = $('ccs-filters');
@@ -820,6 +874,37 @@ window.CCOOL_SHOP = {
       <button type="button" data-modelfilter="中階型號" data-all-only="1" aria-pressed="false">中階型號</button>
       <button type="button" data-modelfilter="T牌保護盒" data-all-only="1" aria-pressed="false">T牌保護盒</button>
     `;
+
+    // 建立「原創設計」專屬子系列篩選列
+    let subFilterContainer = root.querySelector('#ccs-sub-filters');
+    if (!subFilterContainer) {
+      subFilterContainer = document.createElement('div');
+      subFilterContainer.id = 'ccs-sub-filters';
+      subFilterContainer.className = 'ccs-model-filters';
+      subFilterContainer.style.display = 'none';
+      subFilterContainer.style.marginTop = '8px';
+      modelFilterContainer.after(subFilterContainer);
+    }
+    subFilterContainer.innerHTML = `
+      <span style="font-size:12px; color:#d8c6a5; align-self:center; margin-right:4px;">系列：</span>
+      <button type="button" data-subfilter="all" aria-pressed="true">全部原創</button>
+      ${originalSubSeries
+        .map(
+          (sub) =>
+            `<button type="button" data-subfilter="${esc(sub)}" aria-pressed="false">${esc(sub)}</button>`
+        )
+        .join('')}
+    `;
+
+    // 建立原創子系列專屬 BANNER 預留容器（放在商品網格正上方）
+    let subBannerContainer = root.querySelector('#ccs-sub-banner');
+    if (!subBannerContainer) {
+      subBannerContainer = document.createElement('div');
+      subBannerContainer.id = 'ccs-sub-banner';
+      subBannerContainer.style.display = 'none';
+      subBannerContainer.style.margin = '14px 0 18px';
+      $('ccs-grid').before(subBannerContainer);
+    }
 
     // 在購物車區塊內（小計上方）建立固定的「推進器加購專區」與「滿額贈專區」
     const totalsEl = root.querySelector('.ccs-totals');
@@ -866,6 +951,7 @@ window.CCOOL_SHOP = {
 
     function renderProducts() {
       const selectedSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
+      const isOriginalCategory = selectedSeries === '原創設計';
       const isTBrandCategory = selectedSeries === 'T牌保護盒';
       const isMidTierCategory = selectedSeries === '中階主機看這裡';
 
@@ -878,6 +964,30 @@ window.CCOOL_SHOP = {
         });
       }
 
+      // 只有點選「原創設計」時顯示子系列篩選列
+      if (subFilterContainer) {
+        subFilterContainer.style.display = isOriginalCategory ? 'flex' : 'none';
+      }
+
+      // 顯示對應的原創子系列 BANNER（有設定圖片網址才顯示）
+      if (subBannerContainer) {
+        const bannerUrl =
+          isOriginalCategory && currentOriginalSubFilter !== 'all'
+            ? subSeriesBanners[currentOriginalSubFilter]
+            : '';
+        if (bannerUrl) {
+          subBannerContainer.style.display = 'block';
+          subBannerContainer.innerHTML = `
+            <div style="width:100%; border-radius:14px; overflow:hidden; border:1px solid #393939; background:#181818;">
+              <img src="${esc(bannerUrl)}" alt="${esc(currentOriginalSubFilter)} Banner" style="width:100%; height:auto; display:block;" />
+            </div>
+          `;
+        } else {
+          subBannerContainer.style.display = 'none';
+          subBannerContainer.innerHTML = '';
+        }
+      }
+
       const filteredProducts = products.filter((p) => {
         if (isTBrandCategory) {
           return p.series === 'T牌保護盒';
@@ -886,6 +996,10 @@ window.CCOOL_SHOP = {
           return p.series === '中階主機看這裡';
         }
         const matchSeries = !selectedSeries || p.series === selectedSeries;
+        const matchSubSeries =
+          !isOriginalCategory ||
+          currentOriginalSubFilter === 'all' ||
+          p.subSeries === currentOriginalSubFilter;
         let matchModel = true;
         if (currentModelFilter === '7代') {
           matchModel = p.model.includes('7代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '7代');
@@ -896,7 +1010,7 @@ window.CCOOL_SHOP = {
         } else if (currentModelFilter === 'T牌保護盒') {
           matchModel = p.series === 'T牌保護盒' || p.model === 'T牌';
         }
-        return matchSeries && matchModel;
+        return matchSeries && matchSubSeries && matchModel;
       });
 
       $('ccs-grid').innerHTML = filteredProducts.length ? filteredProducts.map((p) => {
@@ -1179,6 +1293,14 @@ window.CCOOL_SHOP = {
             el.setAttribute('aria-pressed', el.dataset.modelfilter === 'all');
           });
         }
+        // 切換離開「原創設計」時，重置原創子系列為「全部原創」
+        const nextSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
+        if (nextSeries !== '原創設計' && currentOriginalSubFilter !== 'all') {
+          currentOriginalSubFilter = 'all';
+          subFilterContainer.querySelectorAll('[data-subfilter]').forEach((el) => {
+            el.setAttribute('aria-pressed', el.dataset.subfilter === 'all');
+          });
+        }
         renderProducts();
       }
 
@@ -1186,6 +1308,13 @@ window.CCOOL_SHOP = {
       if (b.hasAttribute('data-modelfilter')) {
         currentModelFilter = b.dataset.modelfilter;
         modelFilterContainer.querySelectorAll('[data-modelfilter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
+        renderProducts();
+      }
+
+      // 原創設計子系列點擊
+      if (b.hasAttribute('data-subfilter')) {
+        currentOriginalSubFilter = b.dataset.subfilter;
+        subFilterContainer.querySelectorAll('[data-subfilter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
         renderProducts();
       }
       
