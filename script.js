@@ -1,8 +1,11 @@
-/* 商品資料集中在此；已新增「中階」分類與 K443、K451、K452、K453 四款商品。 */
+/* 商品資料集中在此；已加入「商品小計滿 NT$999（不含運費）免費任選保護盒 1 個（排除 K441、K619）」功能。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
   shipping: 60,
+  // 滿額贈設定（不含運費滿 999 送 T 牌保護盒，排除 K441、K619）
+  giftThreshold: 999,
+  giftExcludedIds: ['K441', 'K619'],
   // 推進器加購設定（價格 NT$69，不顯示 SKU，統一在購物車加購並附 IG 影片連結）
   addon: {
     id: 'ADDON',
@@ -694,11 +697,17 @@ window.CCOOL_SHOP = {
     const $ = (id) => root.querySelector('#' + id),
       products = config.products,
       addon = config.addon,
+      giftThreshold = config.giftThreshold || 999,
+      giftExcludedIds = config.giftExcludedIds || ['K441', 'K619'],
+      giftOptions = products.filter(
+        (p) => p.series === 'T牌保護盒' && !giftExcludedIds.includes(p.id)
+      ),
       map = new Map(products.map((p) => [p.id, p]));
     if (addon) map.set(addon.id, addon);
 
     const money = (n) => 'NT$' + n.toLocaleString('zh-TW'),
       key = 'ccool-cart-v39',
+      giftKey = 'ccool-gift-v1',
       SEP = '|',
       addonCartKey = addon ? addon.id + SEP + addon.model : '';
 
@@ -715,6 +724,7 @@ window.CCOOL_SHOP = {
           }[c])
       );
     let cart = {},
+      selectedGiftId = '',
       timer,
       purchaseTracked = false;
 
@@ -757,11 +767,16 @@ window.CCOOL_SHOP = {
           cart[k] = n;
         }
       }
+      const savedGift = localStorage.getItem(giftKey) || '';
+      if (giftOptions.some((g) => g.id === savedGift)) {
+        selectedGiftId = savedGift;
+      }
     } catch (error) {}
 
     function persist() {
       try {
         localStorage.setItem(key, JSON.stringify(cart));
+        localStorage.setItem(giftKey, selectedGiftId);
       } catch (error) {}
     }
     function notify(text) {
@@ -804,14 +819,21 @@ window.CCOOL_SHOP = {
       <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
     `;
 
-    // 在購物車區塊內（小計上方）建立固定的「推進器加購專區」
+    // 在購物車區塊內（小計上方）建立固定的「推進器加購專區」與「滿額贈專區」
+    const totalsEl = root.querySelector('.ccs-totals');
     let cartAddonContainer = root.querySelector('#ccs-cart-addon');
     if (!cartAddonContainer && addon) {
       cartAddonContainer = document.createElement('div');
       cartAddonContainer.id = 'ccs-cart-addon';
       cartAddonContainer.className = 'ccs-cart-addon';
-      const totalsEl = root.querySelector('.ccs-totals');
       if (totalsEl) totalsEl.before(cartAddonContainer);
+    }
+
+    let cartGiftContainer = root.querySelector('#ccs-cart-gift');
+    if (!cartGiftContainer && giftOptions.length > 0) {
+      cartGiftContainer = document.createElement('div');
+      cartGiftContainer.id = 'ccs-cart-gift';
+      if (totalsEl) totalsEl.before(cartGiftContainer);
     }
 
     // 右下角懸浮浮動視窗收合展開控制
@@ -958,6 +980,53 @@ window.CCOOL_SHOP = {
       return { count, sub, fee, total: sub + fee, clearanceQty };
     }
 
+    function renderGiftSection(t) {
+      if (!cartGiftContainer || !giftOptions.length) return;
+      if (t.sub >= giftThreshold) {
+        const chosen = giftOptions.find((g) => g.id === selectedGiftId);
+        const previewHtml = chosen
+          ? `<div style="display:flex; align-items:center; gap:10px; margin-top:10px; padding:8px; background:#141414; border:1px solid #333; border-radius:8px;">
+              <button type="button" data-zoom="${esc(chosen.id)}" aria-label="查看${esc(chosen.name)}大圖" style="padding:0; border:none; background:none; cursor:pointer; flex-shrink:0;">
+                <img src="${esc(chosen.image)}" alt="${esc(chosen.name)}" style="width:46px; height:46px; object-fit:cover; border-radius:6px; display:block; border:1px solid #444;">
+              </button>
+              <div style="font-size:12px; line-height:1.4;">
+                <div style="color:#d8c6a5; font-weight:700;">已選贈品：${esc(chosen.id)} ${esc(formatDisplayName(chosen))}</div>
+                <div style="color:#aaa;">滿額贈送 NT$0（點圖可放大）</div>
+              </div>
+            </div>`
+          : `<div style="margin-top:6px; font-size:11px; color:#ff7875;">※ 請先選擇 1 款贈品保護盒，再填寫收件資料</div>`;
+
+        cartGiftContainer.innerHTML = `
+          <div style="margin: 14px 0; padding: 12px; background: rgba(216, 198, 165, 0.08); border: 1px solid #d8c6a5; border-radius: 10px;">
+            <div style="font-size: 13px; font-weight: 700; color: #d8c6a5; margin-bottom: 8px;">🎁 滿 NT$${giftThreshold} 達標！免費任選保護盒 1 個</div>
+            <select id="ccs-gift-select" style="width:100%; padding:8px 10px; background:#181818; color:#fff; border:1px solid #555; border-radius:8px; font-size:13px;">
+              <option value="">-- 請選擇免費贈送的保護盒 --</option>
+              ${giftOptions
+                .map(
+                  (g) =>
+                    `<option value="${esc(g.id)}" ${
+                      g.id === selectedGiftId ? 'selected' : ''
+                    }>${esc(g.id)} ${esc(formatDisplayName(g))}</option>`
+                )
+                .join('')}
+            </select>
+            ${previewHtml}
+          </div>
+        `;
+      } else {
+        const diff = giftThreshold - t.sub;
+        const msg =
+          t.count > 0
+            ? `🎁 滿額禮｜再差 <b style="color:#d8c6a5;">${money(diff)}</b>（不含運費）即可免費任選保護盒 1 個`
+            : `🎁 滿額禮｜商品滿 <b style="color:#d8c6a5;">NT$${giftThreshold}</b>（不含運費）免費任選保護盒 1 個`;
+        cartGiftContainer.innerHTML = `
+          <div style="margin: 14px 0; padding: 10px 12px; background: #181818; border: 1px dashed #444; border-radius: 10px; font-size: 12px; color: #bbb; line-height: 1.5;">
+            ${msg}
+          </div>
+        `;
+      }
+    }
+
     function renderCart() {
       const allList = rows(),
         mainList = allList.filter((item) => !addon || item.id !== addon.id),
@@ -1020,6 +1089,9 @@ window.CCOOL_SHOP = {
         `;
       }
 
+      // 渲染滿 999 贈品選擇區
+      renderGiftSection(t);
+
       if (!t.count) $('ccs-delivery').hidden = true;
       persist();
     }
@@ -1036,6 +1108,11 @@ window.CCOOL_SHOP = {
 
     root.addEventListener('change', (event) => {
       const target = event.target;
+      if (target.id === 'ccs-gift-select') {
+        selectedGiftId = target.value;
+        renderCart();
+        return;
+      }
       if (target.dataset.opt) {
         const productId = target.dataset.opt;
         const selectedOption = target.options[target.selectedIndex];
@@ -1169,8 +1246,23 @@ window.CCOOL_SHOP = {
       if (b.hasAttribute('data-close')) b.closest('dialog').close();
     });
 
+    function checkGiftSelected(t) {
+      if (t.sub >= giftThreshold && !giftOptions.some((g) => g.id === selectedGiftId)) {
+        notify(`已滿 NT$${giftThreshold}，請先選擇免費贈送的保護盒`);
+        const selectEl = $('ccs-gift-select');
+        if (selectEl) {
+          selectEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          selectEl.focus({ preventScroll: true });
+        }
+        return false;
+      }
+      return true;
+    }
+
     $('ccs-checkout').addEventListener('click', () => {
-      if (!totals().count) return;
+      const t = totals();
+      if (!t.count) return;
+      if (!checkGiftSelected(t)) return;
       $('ccs-delivery').hidden = false;
       $('ccs-delivery').scrollIntoView({ behavior: 'smooth', block: 'start' });
       $('ccs-form').elements.receiver.focus({ preventScroll: true });
@@ -1180,10 +1272,12 @@ window.CCOOL_SHOP = {
     form.addEventListener('input', (event) => event.target.setCustomValidity?.(''));
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      if (!totals().count) {
+      const t = totals();
+      if (!t.count) {
         notify('請先加入商品');
         return;
       }
+      if (!checkGiftSelected(t)) return;
       const f = form.elements;
       for (const name of ['receiver', 'phone', 'store', 'invoice', 'note'])
         f[name].value = f[name].value.trim();
@@ -1202,7 +1296,10 @@ window.CCOOL_SHOP = {
           : '手機條碼需為 / 加上 7 碼英數或符號'
       );
       if (!form.reportValidity()) return;
-      const t = totals();
+      const chosenGift =
+        t.sub >= giftThreshold
+          ? giftOptions.find((g) => g.id === selectedGiftId)
+          : null;
       const lines = [
         '【C.COOL 訂購申請】',
         ...rows().map(
@@ -1212,6 +1309,12 @@ window.CCOOL_SHOP = {
             return `${i + 1}. ${titlePrefix}${fullTitle}／規格：${item.spec}\n   NT$${item.price} × ${item.qty} 件＝NT$${item.price * item.qty}`;
           }
         ),
+        ...(chosenGift
+          ? [
+              '',
+              `【滿額贈品】${chosenGift.id} ${formatDisplayName(chosenGift)}（NT$0）`,
+            ]
+          : []),
         '',
         `商品小計：NT$${t.sub}`,
         `運費：NT$${t.fee}`,
