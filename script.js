@@ -1,4 +1,4 @@
-/* 商品資料集中在此；已加入「商品小計滿 NT$999（不含運費）免費任選保護盒 1 個（排除 K441、K619）」功能。 */
+/* 商品資料集中在此；「中階」改名為「中階主機看這裡」，並在「全部商品」子索引新增「中階型號」與「T牌保護盒」。 */
 window.CCOOL_SHOP = {
   logo: 'https://i.meee.com.tw/OEd9CUr.png',
   lineId: '@330vhvgc',
@@ -508,12 +508,12 @@ window.CCOOL_SHOP = {
       price: 350,
       image: 'https://i.meee.com.tw/P8P5YRO.jpg'
     },
-    // 中階系列（獨立分類）
+    // 中階主機看這裡（獨立分類）
     {
       id: 'K443',
       name: 'TPU透明',
       color: '',
-      series: '中階',
+      series: '中階主機看這裡',
       model: '中階',
       price: 250,
       image: 'https://i.meee.com.tw/dQfUO8q.jpg',
@@ -522,7 +522,7 @@ window.CCOOL_SHOP = {
       id: 'K451',
       name: '矽膠殼+側蓋',
       color: '黑灰色',
-      series: '中階',
+      series: '中階主機看這裡',
       model: '中階',
       price: 350,
       image: 'https://i.meee.com.tw/5sRDCMl.jpg',
@@ -531,7 +531,7 @@ window.CCOOL_SHOP = {
       id: 'K452',
       name: '小熊殼+側蓋',
       color: '卡其色',
-      series: '中階',
+      series: '中階主機看這裡',
       model: '中階',
       price: 450,
       image: 'https://i.meee.com.tw/84v86YT.jpg',
@@ -540,12 +540,12 @@ window.CCOOL_SHOP = {
       id: 'K453',
       name: '小熊殼+側蓋',
       color: '深棕色',
-      series: '中階',
+      series: '中階主機看這裡',
       model: '中階',
       price: 450,
       image: 'https://i.meee.com.tw/tTPKkcs.jpg',
     },
-    // T牌保護盒系列（獨立分類，不與 7、8 代混排）
+    // T牌保護盒系列
     {
       id: 'K387',
       name: '鯉魚',
@@ -787,12 +787,12 @@ window.CCOOL_SHOP = {
     }
     root.querySelectorAll('[data-logo]').forEach((img) => (img.src = config.logo));
     
-    // 自訂系列順序：原創設計排第一，T牌保護盒獨立放在最後一個分類
+    // 自訂系列順序：原創設計排第一，其餘依序排列
     const rawSeries = [...new Set(products.map((p) => p.series))];
     const series = ['原創設計', ...rawSeries.filter(s => s !== '原創設計')];
 
-    let currentSeriesIndex = 0; // 0 代表全部保護套（不含 T牌保護盒）
-    let currentModelFilter = 'all'; // 'all', '7代', '8代'
+    let currentSeriesIndex = 0; // 0 代表全部商品
+    let currentModelFilter = 'all'; // 'all', '7代', '8代', '中階型號', 'T牌保護盒'
 
     // 渲染大分類篩選列
     const filtersContainer = $('ccs-filters');
@@ -805,7 +805,7 @@ window.CCOOL_SHOP = {
       )
       .join('');
 
-    // 強制建立或覆蓋機型次級篩選列（只放 全部型號、7代、8代）
+    // 建立機型次級篩選列（全部商品時多顯示「中階型號」與「T牌保護盒」）
     let modelFilterContainer = root.querySelector('.ccs-model-filters');
     if (!modelFilterContainer) {
       modelFilterContainer = document.createElement('div');
@@ -817,6 +817,8 @@ window.CCOOL_SHOP = {
       <button type="button" data-modelfilter="all" aria-pressed="true">全部型號</button>
       <button type="button" data-modelfilter="7代" aria-pressed="false">7代</button>
       <button type="button" data-modelfilter="8代" aria-pressed="false">8代</button>
+      <button type="button" data-modelfilter="中階型號" data-all-only="1" aria-pressed="false">中階型號</button>
+      <button type="button" data-modelfilter="T牌保護盒" data-all-only="1" aria-pressed="false">T牌保護盒</button>
     `;
 
     // 在購物車區塊內（小計上方）建立固定的「推進器加購專區」與「滿額贈專區」
@@ -865,11 +867,15 @@ window.CCOOL_SHOP = {
     function renderProducts() {
       const selectedSeries = currentSeriesIndex === 0 ? null : series[currentSeriesIndex - 1];
       const isTBrandCategory = selectedSeries === 'T牌保護盒';
-      const isMidTierCategory = selectedSeries === '中階';
+      const isMidTierCategory = selectedSeries === '中階主機看這裡';
 
-      // 當點選「T牌保護盒」或「中階」時，隱藏下方的 7代/8代 機型小分類列
+      // 當點選「T牌保護盒」或「中階主機看這裡」時，隱藏下方的機型小分類列
       if (modelFilterContainer) {
         modelFilterContainer.style.display = (isTBrandCategory || isMidTierCategory) ? 'none' : 'flex';
+        // 「中階型號」與「T牌保護盒」子索引僅在「全部商品」顯示
+        modelFilterContainer.querySelectorAll('[data-all-only="1"]').forEach((btn) => {
+          btn.style.display = currentSeriesIndex === 0 ? '' : 'none';
+        });
       }
 
       const filteredProducts = products.filter((p) => {
@@ -877,10 +883,7 @@ window.CCOOL_SHOP = {
           return p.series === 'T牌保護盒';
         }
         if (isMidTierCategory) {
-          return p.series === '中階';
-        }
-        if (p.series === 'T牌保護盒') {
-          return false;
+          return p.series === '中階主機看這裡';
         }
         const matchSeries = !selectedSeries || p.series === selectedSeries;
         let matchModel = true;
@@ -888,6 +891,10 @@ window.CCOOL_SHOP = {
           matchModel = p.model.includes('7代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '7代');
         } else if (currentModelFilter === '8代') {
           matchModel = p.model.includes('8代') || p.model.includes('7、8代') || p.options?.some(o => o.value === '8代');
+        } else if (currentModelFilter === '中階型號') {
+          matchModel = p.series === '中階主機看這裡' || p.model === '中階';
+        } else if (currentModelFilter === 'T牌保護盒') {
+          matchModel = p.series === 'T牌保護盒' || p.model === 'T牌';
         }
         return matchSeries && matchModel;
       });
@@ -1162,6 +1169,16 @@ window.CCOOL_SHOP = {
       if (b.hasAttribute('data-filter')) {
         currentSeriesIndex = Number(b.dataset.filter);
         root.querySelectorAll('[data-filter]').forEach((el) => el.setAttribute('aria-pressed', el === b));
+        // 切換到非「全部商品」時，若原本停在專屬子索引則自動重置為「全部型號」
+        if (
+          currentSeriesIndex !== 0 &&
+          (currentModelFilter === '中階型號' || currentModelFilter === 'T牌保護盒')
+        ) {
+          currentModelFilter = 'all';
+          modelFilterContainer.querySelectorAll('[data-modelfilter]').forEach((el) => {
+            el.setAttribute('aria-pressed', el.dataset.modelfilter === 'all');
+          });
+        }
         renderProducts();
       }
 
